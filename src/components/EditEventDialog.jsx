@@ -129,10 +129,10 @@ export function DialogDemo({ event, onUpdated }) {
           setOpen(true);
         }}
         className="w-full rounded-full border border-white/15
-        bg-white/10 px-4 py-2 text-sm font-bold text-white
-        backdrop-blur-xl transition-all duration-300
-        hover:border-white/30 hover:bg-white/20
-        hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
+bg-white/10 px-3 py-2 text-xs font-bold text-white
+text-center backdrop-blur-xl transition-all duration-300
+hover:border-white/30 hover:bg-white/20
+hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
       >
         Edit
       </button>

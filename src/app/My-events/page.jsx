@@ -149,33 +149,45 @@ export default function MyEventsPage() {
                                         {event.description}
                                     </p>
 
-                                    <div className="flex gap-3">
+                                    <div className="flex items-center gap-2">
+                                        {/* View Button */}
                                         <Link
                                             href={`/My-events/${event._id}`}
-                                            className="flex-1 rounded-full bg-white/10 text-white text-sm font-bold py-2 hover:bg-white/20 transition-colors border border-white/10 text-center"
+                                            className="shrink-0 rounded-full border border-white/20
+    bg-white/10 px-3 py-2 text-xs font-bold text-white
+    transition hover:bg-white/20"
                                         >
                                             View
                                         </Link>
 
-                                        <DialogDemo
-                                            event={event}
-                                            onUpdated={(updatedEvent) => {
-                                                setEvents((prevEvents) =>
-                                                    prevEvents.map((item) =>
-                                                        item._id === updatedEvent._id ? updatedEvent : item
-                                                    )
-                                                );
-                                            }}
-                                        />
+                                        {/* Edit Button */}
+                                        <div className="min-w-0 flex-1">
+                                            <DialogDemo
+                                                event={event}
+                                                onUpdated={(updatedEvent) => {
+                                                    setEvents((prevEvents) =>
+                                                        prevEvents.map((item) =>
+                                                            item._id === updatedEvent._id
+                                                                ? updatedEvent
+                                                                : item
+                                                        )
+                                                    );
+                                                }}
+                                            />
+                                        </div>
 
-
+                                        {/* Delete Button */}
                                         <button
-                                            onClick={() => deleteEvent(event._id)}
-                                            className="flex-1 rounded-full bg-rose-500/80 text-white text-sm font-bold py-2 hover:bg-rose-600 transition-colors"
+                                            onClick={() => handleDelete(event._id)}
+                                            className="shrink-0 rounded-full bg-pink-600
+    px-3 py-2 text-xs font-bold text-white
+    transition hover:bg-pink-700"
                                         >
                                             Delete
                                         </button>
                                     </div>
+
+
                                 </div>
                             </article>
                         ))}
