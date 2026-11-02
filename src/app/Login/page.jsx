@@ -1,9 +1,33 @@
 "use client";
+import { authClient } from "../../lib/auth-client";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleEmailLogin = async (e) => {
+    e.preventDefault()
+
+    const formData = new FormData(e.target)
+    const user = Object.fromEntries(formData.entries())
+
+    console.log(user);
+
+    const { data, error } = await authClient.signIn.email({
+      ...user,
+    })
+    if (data) {
+     
+      alert(`Signing in with: ${email}`)
+       redirect('/')
+    }
+    if (error) {
+      console.log(error);
+
+    }
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#2d1b4e] via-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] flex items-center justify-center px-6">
@@ -16,10 +40,7 @@ export default function LoginPage() {
         </div>
 
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            alert(`Signing in with: ${email}`);
-          }}
+          onSubmit={handleEmailLogin}
           className="space-y-5"
         >
           {/* Email */}
@@ -30,6 +51,7 @@ export default function LoginPage() {
             <input
               id="email"
               type="email"
+              name="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -46,6 +68,7 @@ export default function LoginPage() {
             <input
               id="password"
               type="password"
+              name="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -55,16 +78,12 @@ export default function LoginPage() {
           </div>
 
           {/* Submit */}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              alert(`Signing in with: ${email}`);
-            }}
+          <button
+            type="submit"
             className="block w-full text-center rounded-full bg-white text-purple-900 font-extrabold text-base py-3.5 shadow-[0_8px_25px_rgba(255,255,255,0.3)] hover:bg-white/90 hover:shadow-[0_12px_35px_rgba(255,255,255,0.45)] transition-all active:scale-[0.98]"
           >
             Sign in
-          </a>
+          </button>
 
           {/* Continue with Google */}
           <a

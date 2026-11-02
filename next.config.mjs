@@ -14,6 +14,9 @@ const nextConfig = {
         as: "*.css",
       },
     },
+    resolveAlias: {
+      "@/lib/auth": "./src/lib/auth.js",
+    },
   },
 };
 

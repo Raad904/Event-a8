@@ -1,6 +1,15 @@
+"use client";
+import { authClient } from "../lib/auth-client";
 import Link from "next/link";
 
+
+
 export default function Navbar() {
+
+  const {data:session} = authClient.useSession()
+  const user = session?.user
+  console.log(user);
+  
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[96%] sm:w-[92%] max-w-6xl rounded-full px-3 sm:px-5 py-2.5 sm:py-3 border border-white/10 bg-white/10 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]">
       <div className="flex items-center justify-between gap-2">
@@ -45,13 +54,12 @@ export default function Navbar() {
         <div>
          <Link
           href={"/Create-event"}
-          className="shrink-0 ml-1 inline-flex items-center justify-center text-xs sm:text-sm font-semibold text-purple-900 bg-white hover:bg-white/90 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 shadow-[0_4px_14px_0_rgba(255,255,255,0.25)] transition-colors"
+          className="hidden md:inline-flex shrink-0 ml-1 items-center justify-center text-xs sm:text-sm font-semibold text-purple-900 bg-white hover:bg-white/90 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 shadow-[0_4px_14px_0_rgba(255,255,255,0.25)] transition-colors"
         >
           Create Event
         </Link>
 
-
-        {/* Sign up button */}
+         {/* Sign up button */}
         <Link
           href={"/Login"}
           className="shrink-0 ml-1 inline-flex items-center justify-center text-xs sm:text-sm font-semibold text-purple-900 bg-white hover:bg-white/90 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 shadow-[0_4px_14px_0_rgba(255,255,255,0.25)] transition-colors"

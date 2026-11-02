@@ -178,10 +178,12 @@ export default function MyEventsPage() {
 
                                         {/* Delete Button */}
                                         <button
-                                            onClick={() => handleDelete(event._id)}
+                                            onClick={() => deleteEvent(event._id)}
                                             className="shrink-0 rounded-full bg-pink-600
-    px-3 py-2 text-xs font-bold text-white
-    transition hover:bg-pink-700"
+  px-3 py-2 text-xs font-bold text-white
+  transition hover:bg-pink-700
+  hover:shadow-[0_0_15px_rgba(236,72,153,0.5)]
+  disabled:opacity-50"
                                         >
                                             Delete
                                         </button>

@@ -2,6 +2,8 @@ import { Lora } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Foder.jsx";
+import ProfileDropdown from "../components/ProfileDropdown.jsx";
+
 
 const lora = Lora({
   variable: "--font-geist-sans",
@@ -22,6 +24,7 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         <Navbar></Navbar>
+        <ProfileDropdown />
         <main className="flex-1">{children}</main>
         <Footer></Footer>
       </body>
