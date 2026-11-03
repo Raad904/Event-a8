@@ -21,7 +21,7 @@ export default function EventDetailsPage() {
         setError("");
 
         const res = await fetch(
-          `http://localhost:5000/my-event/${id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/my-event/${id}`
         );
 
         if (!res.ok) {

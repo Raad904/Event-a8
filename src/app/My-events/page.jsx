@@ -52,7 +52,7 @@ export default function MyEventsPage() {
         if (!confirmDelete) return;
 
         try {
-            const res = await fetch(`http://localhost:5000/my-event/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my-event/${id}`, {
                 method: "DELETE",
             });
 

@@ -79,7 +79,7 @@ export function DialogDemo({ event, onUpdated }) {
       setError("");
 
       const res = await fetch(
-        `http://localhost:5000/my-event/${eventId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/my-event/${eventId}`,
         {
           method: "PATCH",
           headers: {

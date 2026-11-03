@@ -52,7 +52,7 @@ export default function CreateEventPage() {
         organizerEmail: session.user.email,
       };
 
-      const res = await fetch("http://localhost:5000/Create-event", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Create-event`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
