@@ -1,53 +1,98 @@
 "use client";
+
 import { authClient } from "../../lib/auth-client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleEmailLogin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const formData = new FormData(e.target)
-    const user = Object.fromEntries(formData.entries())
+    if (loading) return;
 
-    console.log(user);
+    try {
+      setLoading(true);
 
-    const { data, error } = await authClient.signIn.email({
-      ...user,
-    })
-    if (data) {
-     
-      alert(`Signing in with: ${email}`)
-       redirect('/')
+      const { data, error } = await authClient.signIn.email({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast.error(
+          error.message || "Login failed. Please check your credentials."
+        );
+        return;
+      }
+
+      if (data) {
+        toast.success("Login successful! Welcome back.");
+
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    if (error) {
-      console.log(error);
+  };
 
+  // Google Login
+  const handleGoogleLogin = async () => {
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/",
+      });
+
+    } catch (error) {
+      console.error("Google login error:", error);
+
+      toast.error("Unable to continue with Google. Please try again.");
     }
-  }
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#2d1b4e] via-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] flex items-center justify-center px-6">
       <div className="w-full max-w-md bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] p-10 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+
         {/* Brand */}
         <div className="text-center mb-8">
-          <img src="/images/logo.png" alt="SDEP Logo" className="mx-auto h-14 w-14 drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] mb-3" />
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Welcome back</h1>
-          <p className="text-white/70 mt-2">sign into organize and join community device </p>
+          <img
+            src="/images/logo.png"
+            alt="SDEP Logo"
+            className="mx-auto h-14 w-14 drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] mb-3"
+          />
+
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+            Welcome back
+          </h1>
+
+          <p className="text-white/70 mt-2">
+            sign into organize and join community device
+          </p>
         </div>
 
-        <form
-          onSubmit={handleEmailLogin}
-          className="space-y-5"
-        >
+        <form onSubmit={handleEmailLogin} className="space-y-5">
+
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-white/90 mb-2">
+            <label
+              htmlFor="email"
+              className="block text-sm font-semibold text-white/90 mb-2"
+            >
               Email
             </label>
+
             <input
               id="email"
               type="email"
@@ -62,9 +107,13 @@ export default function LoginPage() {
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-semibold text-white/90 mb-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-semibold text-white/90 mb-2"
+            >
               Password
             </label>
+
             <input
               id="password"
               type="password"
@@ -80,33 +129,36 @@ export default function LoginPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="block w-full text-center rounded-full bg-white text-purple-900 font-extrabold text-base py-3.5 shadow-[0_8px_25px_rgba(255,255,255,0.3)] hover:bg-white/90 hover:shadow-[0_12px_35px_rgba(255,255,255,0.45)] transition-all active:scale-[0.98]"
+            disabled={loading}
+            className="block w-full text-center rounded-full bg-white text-purple-900 font-extrabold text-base py-3.5 shadow-[0_8px_25px_rgba(255,255,255,0.3)] hover:bg-white/90 hover:shadow-[0_12px_35px_rgba(255,255,255,0.45)] transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Sign in
+            {loading ? "Signing in..." : "Sign in"}
           </button>
 
           {/* Continue with Google */}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              alert("Continuing with Google...");
-            }}
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
             className="block w-full text-center rounded-full bg-[#4285F4] text-white font-extrabold text-base py-3.5 shadow-[0_8px_25px_rgba(66,133,244,0.4)] hover:bg-[#357ae8] hover:shadow-[0_12px_35px_rgba(66,133,244,0.55)] transition-all active:scale-[0.98] mt-4"
           >
             Continue with Google
-          </a>
+          </button>
+
         </form>
 
         {/* Register link */}
         <div className="mt-6 text-center">
           <p className="text-white/70 text-sm">
             Don&apos;t have an account?{" "}
-            <a href={"/Register"} className="text-amber-200 font-bold hover:text-amber-100 hover:underline transition-colors">
+            <a
+              href={"/Register"}
+              className="text-amber-200 font-bold hover:text-amber-100 hover:underline transition-colors"
+            >
               Register Now
             </a>
           </p>
         </div>
+
       </div>
     </main>
   );

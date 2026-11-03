@@ -1,80 +1,44 @@
 "use client";
 
+
+
 import Link from "next/link";
-import { authClient } from "../../lib/auth-client";
-import { useRouter } from "next/navigation";
 import { DialogDemo } from "../../components/EditEventDialog.jsx";
 import { useEffect, useState } from "react";
 
 export default function MyEventsPage() {
-const { data: session, isPending } = authClient.useSession();
-const router = useRouter();
-const user = session?.user;
-
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-
-
     useEffect(() => {
-        if (isPending || !user) return;
-
-        let cancelled = false;
-
         const fetchEvents = async () => {
             try {
-                setLoading(true);
-                setError("");
-
-                const res = await fetch("http://localhost:5000/my-event", {
-                    method: "GET",
-                    credentials: "include",
-                });
-
-                if (res.status === 401) {
-                    router.push("/Login");
-                    return;
-                }
+                const res = await fetch("http://localhost:5000/my-event");
 
                 if (!res.ok) {
                     throw new Error("Failed to fetch events");
                 }
 
                 const data = await res.json();
-
-                if (!cancelled) {
-                    setEvents(Array.isArray(data) ? data : []);
-                }
+                setEvents(Array.isArray(data) ? data : []);
             } catch (err) {
-                if (!cancelled) {
-                    console.error("Fetch error:", err);
-                    setError("Failed to load events. Please check your server.");
-                }
+                console.error("Fetch error:", err);
+                setError("Failed to load events. Please check your server.");
             } finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
+                setLoading(false);
             }
         };
 
         fetchEvents();
+    }, []);
 
-        return () => {
-            cancelled = true;
-        };
-    }, [user, isPending, router]);
+    const viewEvent = (event) => {
+        alert(
+            `Title: ${event.title} \nLocation: ${event.location} \nDescription: ${event.description} `
+        );
+    };
 
-    // Redirect to login if not authenticated
-    useEffect(() => {
-        if (isPending) return;
-
-        if (!user) {
-            router.replace("/Login");
-        }
-    }, [user, isPending, router]);
-
-    // Delete Event
     const deleteEvent = async (id) => {
         if (!id) {
             alert("Event ID not found.");
@@ -88,38 +52,24 @@ const user = session?.user;
         if (!confirmDelete) return;
 
         try {
-            const res = await fetch(
-                `http://localhost:5000/my-event/${id}`,
-                {
-                    method: "DELETE",
-                    credentials: "include",
-                }
-            );
-
-            if (res.status === 401) {
-                router.push("/Login");
-                return;
-            }
+            const res = await fetch(`http://localhost:5000/my-event/${id}`, {
+                method: "DELETE",
+            });
 
             if (!res.ok) {
-                const data = await res.json().catch(() => ({}));
-                throw new Error(data.message || "Failed to delete event");
+                throw new Error("Failed to delete event");
             }
 
             setEvents((prevEvents) =>
                 prevEvents.filter((event) => event._id !== id)
             );
-
-            alert("Event deleted successfully!");
-
         } catch (err) {
             console.error("Delete error:", err);
-            alert(err.message || "Could not delete the event.");
+            alert("Could not delete the event. Please try again.");
         }
     };
 
-    // Loading Session
-    if (isPending || loading) {
+    if (loading) {
         return (
             <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-12">
                 <p className="text-center text-white text-xl">
@@ -129,26 +79,17 @@ const user = session?.user;
         );
     }
 
-    // User not logged in
-    if (!user) {
-        return null;
-    }
-
-    // Error
     if (error) {
         return (
             <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-12">
-                <p className="text-center text-white text-xl">
-                    {error}
-                </p>
+                <p className="text-center text-white text-xl">{error}</p>
             </main>
         );
     }
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-12">
+        <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-12 ">
             <div className="max-w-6xl mx-auto">
-
                 <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
                     My Events
                 </h1>
@@ -159,28 +100,23 @@ const user = session?.user;
 
                 {events.length === 0 ? (
                     <div className="text-center text-white/60 py-20">
-                        <p className="text-xl">
-                            No events created yet.
-                        </p>
+                        <p className="text-xl">No events created yet.</p>
 
-                        <Link
+                        <a
                             href="/Create-event"
                             className="inline-block mt-4 text-amber-200 font-bold hover:underline"
                         >
                             Create one →
-                        </Link>
+                        </a>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
                         {events.map((event) => (
                             <article
                                 key={event._id}
                                 className="group bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-[0_4px_30px_rgba(255,255,255,0.05)] hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)] transition-all duration-300 border border-white/10 hover:-translate-y-1"
                             >
-
                                 <div className="relative h-48 overflow-hidden">
-
                                     <img
                                         src={
                                             event.imageUrl ||
@@ -193,11 +129,9 @@ const user = session?.user;
                                     <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-purple-900 shadow-sm">
                                         {event.type}
                                     </div>
-
                                 </div>
 
                                 <div className="p-6">
-
                                     <h3 className="text-xl font-extrabold text-white mb-1">
                                         {event.title}
                                     </h3>
@@ -215,11 +149,12 @@ const user = session?.user;
                                     </p>
 
                                     <div className="flex items-center gap-2">
-
                                         {/* View Button */}
                                         <Link
                                             href={`/My-events/${event._id}`}
-                                            className="shrink-0 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-xs font-bold text-white transition hover:bg-white/20"
+                                            className="shrink-0 rounded-full border border-white/20
+    bg-white/10 px-3 py-2 text-xs font-bold text-white
+    transition hover:bg-white/20"
                                         >
                                             View
                                         </Link>
@@ -243,20 +178,20 @@ const user = session?.user;
                                         {/* Delete Button */}
                                         <button
                                             onClick={() => deleteEvent(event._id)}
-                                            className="shrink-0 rounded-full bg-pink-600 px-3 py-2 text-xs font-bold text-white transition hover:bg-pink-700 hover:shadow-[0_0_15px_rgba(236,72,153,0.5)] disabled:opacity-50"
+                                            className="shrink-0 rounded-full bg-pink-600
+    px-3 py-2 text-xs font-bold text-white
+    transition hover:bg-pink-700"
                                         >
                                             Delete
                                         </button>
-
                                     </div>
+
 
                                 </div>
                             </article>
                         ))}
-
                     </div>
                 )}
-
             </div>
         </main>
     );

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { mockEvents } from "../lib/mockEvents";
+// import { mockEvents } from "../lib/mockEvents";
 
 export default function RecentEvents() {
   const [upcoming, setUpcoming] = useState([]);

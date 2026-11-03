@@ -25,7 +25,7 @@ export default function UpcomingEventsPage() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/events");
+        const res = await fetch("http://localhost:5000/Upcoming-Events");
 
         if (!res.ok) {
           throw new Error("Failed to fetch events");
@@ -249,7 +249,7 @@ export default function UpcomingEventsPage() {
                     </p>
 
                     <a
-                      href={`/My-events/${event._id}`}
+                       href={`/Upcoming-Events/${event._id}`}
                       className="inline-flex items-center text-sm font-bold text-amber-200 transition-colors hover:text-amber-100"
                     >
                       Learn more →

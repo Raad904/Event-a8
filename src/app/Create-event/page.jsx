@@ -1,9 +1,9 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { authClient } from "../../lib/auth-client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function CreateEventPage() {
   const { data: session, isPending } = authClient.useSession();
@@ -12,7 +12,11 @@ export default function CreateEventPage() {
 
   useEffect(() => {
     if (isPending) return;
-    if (!user) router.push("/Login");
+
+    if (!user) {
+      toast.warning("Please login to create an event.");
+      router.push("/Login");
+    }
   }, [user, isPending, router]);
 
   const initialForm = {
@@ -27,15 +31,14 @@ export default function CreateEventPage() {
   const [form, setForm] = useState(initialForm);
   const [publishing, setPublishing] = useState(false);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (publishing) return;
 
-    // User login আছে কি না যাচাই
+    // Check authentication
     if (!session?.user?.id) {
-      alert("Please login before creating an event.");
+      toast.warning("Please login before creating an event.");
       router.push("/Login");
       return;
     }
@@ -43,7 +46,6 @@ export default function CreateEventPage() {
     try {
       setPublishing(true);
 
-      // Event data-এর সঙ্গে User ID যুক্ত করা
       const eventData = {
         ...form,
         createdBy: session.user.id,
@@ -52,7 +54,6 @@ export default function CreateEventPage() {
 
       const res = await fetch("http://localhost:5000/Create-event", {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -62,6 +63,7 @@ export default function CreateEventPage() {
       const data = await res.json().catch(() => ({}));
 
       if (res.status === 401) {
+        toast.warning("Your session has expired. Please login again.");
         router.push("/Login");
         return;
       }
@@ -72,13 +74,16 @@ export default function CreateEventPage() {
 
       setForm({ ...initialForm });
 
-      alert("🎉 Event published successfully!");
+      toast.success("Event published successfully! 🎉");
 
       router.push("/My-events");
 
     } catch (error) {
       console.error("Publish error:", error);
-      alert(error.message || "Failed to publish event. Please try again.");
+
+      toast.error(
+        error.message || "Failed to publish event. Please try again."
+      );
     } finally {
       setPublishing(false);
     }
@@ -92,7 +97,6 @@ export default function CreateEventPage() {
       [name]: value,
     }));
   };
-
 
   if (isPending) {
     return (
@@ -113,7 +117,15 @@ export default function CreateEventPage() {
       <div className="w-full max-w-2xl bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] p-8 sm:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
         <div className="mb-8">
           <div className="flex items-center gap-2 text-white font-bold text-sm tracking-wide mb-3">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            >
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
             Social Service Drive

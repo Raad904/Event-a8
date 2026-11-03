@@ -3,13 +3,12 @@ import "./globals.css";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Foder.jsx";
 import ProfileDropdown from "../components/ProfileDropdown.jsx";
-
+import { Toaster } from "sonner";
 
 const lora = Lora({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
 
 export const metadata = {
   title: "Create Next App",
@@ -20,13 +19,23 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${lora.className}  h-full antialiased`}
+      className={`${lora.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar></Navbar>
+        {/* Global Sonner Toast */}
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          duration={3000}
+        />
+
+        <Navbar />
         <ProfileDropdown />
+
         <main className="flex-1">{children}</main>
-        <Footer></Footer>
+
+        <Footer />
       </body>
     </html>
   );
