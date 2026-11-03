@@ -10,15 +10,14 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## High-signal repo facts
 
-- Next.js 16.4.3 (breaking changes from standard docs). Read `node_modules/next/dist/docs/` before editing APIs/file structure.
-- `tsx: false` in `components.json`: all UI components use `.jsx`. App pages use `.jsx` too (`Login/page.jsx`, `Create-event/page.jsx`, etc.); only `layout.js` and `app/page.js` are `.js`.
-- Tailwind v4 (`tailwindcss` ^4) with `@tailwindcss/turbopack`. CSS entry is `src/app/globals.css` (imports `tailwindcss`, `tw-animate-css`, `shadcn/tailwind.css`).
-- Path alias: `@/*` → `src/*` (`jsconfig.json`). `next.config.mjs` adds `turbopack.resolveAlias` mapping `@/lib/auth` → `./src/lib/auth.js`.
-- Experimental flags in `next.config.mjs`: `agentFeedback`, `reactCompiler: true`, `cacheComponents: false`, `partialPrefetching: false`, `turbopack` with `*.css` loader rule.
+- Next.js 16.4.3 + React 19.3.0. App Router; pages live under `src/app/*/page.jsx`.
+- `tsx: false` in `components.json`: everything is `.js`/`.jsx`, no TypeScript. Path alias `@/*` → `src/*` (`jsconfig.json`).
+- Tailwind v4 with `@tailwindcss/turbopack`. CSS entry is `src/app/globals.css` (imports `tailwindcss`, `tw-animate-css`, `shadcn/tailwind.css`).
+- `next.config.mjs`: `reactCompiler: true` (babel-plugin-react-compiler is a devDependency), `cacheComponents: false`, `partialPrefetching: false`, `turbopack` css loader rule, and `turbopack.resolveAlias` mapping `@/lib/auth` → `./src/lib/auth.js`.
 - `eslint.config.mjs` uses `eslint-config-next/core-web-vitals`; ignores `.next/`, `out/`, `build/`, `next-env.d.ts`.
-- Env vars required (no `.env` file present): `MONGODB_URL` (MongoDB adapter for auth) and `BETTER_AUTH_URL` (client auth base URL). `src/lib/auth.js` creates a MongoDB client with `new MongoClient(process.env.MONGODB_URL)`.
-- Auth: `better-auth` + MongoDB adapter (`src/lib/auth.js`). Auth handler at `src/app/api/auth/[...all]/route.js`. Client exports `authClient` and `createAuthClient()` from `src/lib/auth-client.js` — note the second bare `createAuthClient()` call is missing `baseURL` (potential bug).
-- Font mismatch: `layout.js` imports `Lora` but assigns it to `--font-geist-sans`; CSS variables use `--font-geist-sans` / `--font-geist-mono`.
-- Several `.jsx` pages (`My-events`, `Create-event`) fetch from hardcoded `http://localhost:5000` (expect a separate backend server running on port 5000). `mockEvents.js` provides mock event data.
-- Component ownership: `src/components/ui/` = shadcn-style `.jsx` components; `src/components/` = page sections (`BannerSection.jsx`, `Navbar.jsx`, etc.); `src/app/*/page.jsx` = route pages.
-- No test scripts or test directory present. Only `lint` script (`eslint`).
+- Scripts (`package.json`): `dev` (`next dev`), `build` (`next build`), `start` (`next start`), `lint` (`eslint`). There is NO test script and no test directory.
+- `.env` is present locally with real secrets (`BETTER_AUTH_SECRET`, `NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000`, `MONGODB_URL`). It is NOT committed (`.gitignore` excludes .env*). Client-side env vars need the `NEXT_PUBLIC_` prefix. Do not commit new secrets without flagging it.
+- Auth: `better-auth` + `@better-auth/mongo-adapter` (`src/lib/auth.js` creates `new MongoClient(process.env.MONGODB_URL)`, db name `Event`). Auth handler: `src/app/api/auth/[...all]/route.js`. Client: `src/lib/auth-client.js` exports `authClient` (with `baseURL`) and a second bare `createAuthClient()` call missing `baseURL` (likely bug).
+- Frontend calls a separate backend on `http://localhost:5000`, hardcoded in `Create-event/page.jsx`, `My-events/page.jsx`, `My-events/[id]/page.jsx`, `Upcoming-Events/page.jsx`, and `components/EditEventDialog.jsx`. `src/lib/mockEvents.js` holds mock event data.
+- Component ownership: `src/components/ui/` = shadcn-style `.jsx`; `src/components/` = page sections; `src/app/*/page.jsx` = route pages; only `layout.js` and `app/page.js` are `.js` at the app root.
+- Font gotcha: `layout.js` imports `Lora` but assigns it to CSS var `--font-geist-sans`; CSS uses `--font-geist-sans` / `--font-geist-mono`.

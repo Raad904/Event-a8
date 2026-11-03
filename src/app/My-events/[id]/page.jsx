@@ -9,6 +9,7 @@ export default function EventDetailsPage() {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isJoined, setIsJoined] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -28,6 +29,8 @@ export default function EventDetailsPage() {
 
         const data = await res.json();
         setEvent(data);
+        const joined = JSON.parse(localStorage.getItem("joinedEvents") || "[]");
+        setIsJoined(joined.some((e) => e._id === data._id));
       } catch (err) {
         console.error("Event fetch error:", err);
         setError("Unable to load event details.");
@@ -98,6 +101,26 @@ export default function EventDetailsPage() {
               <a href="/My-events" className="inline-flex items-center gap-2 text-white font-bold hover:text-amber-200 transition-colors">
                 ← Back to My Events
               </a>
+              <button
+                onClick={() => {
+                  const joined = JSON.parse(localStorage.getItem("joinedEvents") || "[]");
+                  if (!isJoined && !joined.find((e) => e._id === event._id)) {
+                    joined.push(event);
+                    localStorage.setItem("joinedEvents", JSON.stringify(joined));
+                    setIsJoined(true);
+                    alert("Joined event! Check Joined Events.");
+                  } else {
+                    alert("Already joined this event.");
+                  }
+                }}
+                className={`mt-4 inline-flex items-center gap-2 rounded-full text-white font-extrabold text-sm px-6 py-3 shadow-[0_8px_25px_rgba(233,30,140,0.4)] transition-all active:scale-[0.98] ${
+                  isJoined
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:shadow-[0_12px_35px_rgba(16,185,129,0.5)]"
+                    : "bg-gradient-to-r from-[#e91e8c] to-[#9c27b0] hover:shadow-[0_12px_35px_rgba(233,30,140,0.5)]"
+                }`}
+              >
+                {isJoined ? "Joined Event" : "Join Event"}
+              </button>
             </div>
             <div className="relative h-72 md:h-auto overflow-hidden rounded-b-[2.5rem] md:rounded-r-[2.5rem] md:rounded-bl-none">
               <img

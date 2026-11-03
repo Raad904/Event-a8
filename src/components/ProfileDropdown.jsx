@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { authClient } from "../lib/auth-client";
-import { LogOut, CalendarDays, PlusCircle, ChevronDown } from "lucide-react";
+import { LogOut, CalendarDays, PlusCircle, ChevronDown, Heart } from "lucide-react";
 
 export default function ProfileDropdown() {
   const { data: session, isPending } = authClient.useSession();
@@ -103,6 +103,14 @@ export default function ProfileDropdown() {
             >
               <PlusCircle size={16} className="text-[#e91e8c] shrink-0" />
               Create Event
+            </Link>
+            <Link
+              href="/JoinedEvents"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-colors text-sm font-medium"
+            >
+              <Heart size={16} className="text-[#e91e8c] shrink-0" />
+              Joined Events
             </Link>
           </nav>
 

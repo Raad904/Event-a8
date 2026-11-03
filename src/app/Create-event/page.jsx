@@ -1,9 +1,20 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { authClient } from "../../lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function CreateEventPage() {
+  const { data: session, isPending } = authClient.useSession();
+  const router = useRouter();
+  const user = session?.user;
+
+  useEffect(() => {
+    if (isPending) return;
+    if (!user) router.push("/Login");
+  }, [user, isPending, router]);
+
   const initialForm = {
     title: "",
     type: "Donation",
@@ -16,33 +27,54 @@ export default function CreateEventPage() {
   const [form, setForm] = useState(initialForm);
   const [publishing, setPublishing] = useState(false);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (publishing) return;
 
+    // User login আছে কি না যাচাই
+    if (!session?.user?.id) {
+      alert("Please login before creating an event.");
+      router.push("/Login");
+      return;
+    }
+
     try {
       setPublishing(true);
 
+      // Event data-এর সঙ্গে User ID যুক্ত করা
+      const eventData = {
+        ...form,
+        createdBy: session.user.id,
+        organizerEmail: session.user.email,
+      };
+
       const res = await fetch("http://localhost:5000/Create-event", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(eventData),
       });
 
       const data = await res.json().catch(() => ({}));
+
+      if (res.status === 401) {
+        router.push("/Login");
+        return;
+      }
 
       if (!res.ok) {
         throw new Error(data.message || "Failed to publish event.");
       }
 
-      // Reset form after successful publishing
       setForm({ ...initialForm });
 
-      // Success alert
       alert("🎉 Event published successfully!");
+
+      router.push("/My-events");
 
     } catch (error) {
       console.error("Publish error:", error);
@@ -60,6 +92,21 @@ export default function CreateEventPage() {
       [name]: value,
     }));
   };
+
+
+  if (isPending) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800]">
+        <p className="text-white text-lg font-semibold">
+          Checking authentication...
+        </p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] flex justify-center items-start px-6 pt-36 pb-12">
@@ -204,7 +251,7 @@ export default function CreateEventPage() {
             </span>
 
             <span className="text-sm text-white font-bold">
-              mppit@mailinator.com
+              {user?.email || "Loading..."}
             </span>
           </div>
 

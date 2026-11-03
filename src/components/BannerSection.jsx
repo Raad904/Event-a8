@@ -1,4 +1,11 @@
+"use client";
+
+import { authClient } from "../lib/auth-client";
+
 export default function BannerSection() {
+
+   const { data: session } = authClient.useSession();
+    const user = session?.user;
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#2d1b4e] via-[#7b1fa2] via-[#c2185b] to-[#ff9800]">
       {/* Decorative shapes */}
@@ -17,7 +24,7 @@ export default function BannerSection() {
           <a href="#events" className="inline-flex items-center justify-center rounded-full bg-white text-purple-900 font-bold px-8 py-3.5 shadow-[0_8px_30px_rgba(255,255,255,0.3)] hover:bg-white/90 transition-colors">
             Upcoming Events
           </a>
-          <a href={"/Create-event"} className="inline-flex items-center justify-center rounded-full bg-white/10 text-white font-semibold px-8 py-3.5 border border-white/20 hover:bg-white/20 transition-colors backdrop-blur-sm">
+          <a href={user ? "/Create-event" : "/Login"} className="inline-flex items-center justify-center rounded-full bg-white/10 text-white font-semibold px-8 py-3.5 border border-white/20 hover:bg-white/20 transition-colors backdrop-blur-sm">
             Create Event
           </a>
         </div>
