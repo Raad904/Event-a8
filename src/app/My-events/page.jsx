@@ -7,31 +7,20 @@ import { DialogDemo } from "../../components/EditEventDialog.jsx";
 import { useEffect, useState } from "react";
 
 export default function MyEventsPage() {
-    const { data: session, isPending } = authClient.useSession();
-    const router = useRouter();
-    const user = session?.user;
+const { data: session, isPending } = authClient.useSession();
+const router = useRouter();
+const user = session?.user;
 
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    // Redirect if user is not logged in
-   useEffect(() => {
-    if (isPending) return;
 
-    if (!user) {
-        router.replace("/Login");
-    }
-}, [user, isPending, router]);
 
-    // Fetch logged-in user's events
     useEffect(() => {
-        if (isPending) return;
+        if (isPending || !user) return;
 
-        if (!user) {
-            setLoading(false);
-            return;
-        }
+        let cancelled = false;
 
         const fetchEvents = async () => {
             try {
@@ -54,18 +43,35 @@ export default function MyEventsPage() {
 
                 const data = await res.json();
 
-                setEvents(Array.isArray(data) ? data : []);
-
+                if (!cancelled) {
+                    setEvents(Array.isArray(data) ? data : []);
+                }
             } catch (err) {
-                console.error("Fetch error:", err);
-                setError("Failed to load events. Please check your server.");
+                if (!cancelled) {
+                    console.error("Fetch error:", err);
+                    setError("Failed to load events. Please check your server.");
+                }
             } finally {
-                setLoading(false);
+                if (!cancelled) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchEvents();
 
+        return () => {
+            cancelled = true;
+        };
+    }, [user, isPending, router]);
+
+    // Redirect to login if not authenticated
+    useEffect(() => {
+        if (isPending) return;
+
+        if (!user) {
+            router.replace("/Login");
+        }
     }, [user, isPending, router]);
 
     // Delete Event
