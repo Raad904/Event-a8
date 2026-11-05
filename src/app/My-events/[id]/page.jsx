@@ -267,10 +267,10 @@ export default function EventDetailsPage() {
               </div>
 
               <a
-                href="/My-events"
+                href="/Upcoming-Events"
                 className="inline-flex items-center gap-2 text-white font-bold hover:text-amber-200 transition-colors"
               >
-                ← Back to My Events
+                ← Back to Upcoming-Events
               </a>
 
               {/* Join Event Button */}

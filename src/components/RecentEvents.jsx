@@ -1,23 +1,48 @@
-"use client";
-import { useState, useEffect } from "react";
 
+"use client";
+
+import { useState, useEffect } from "react";
 
 export default function RecentEvents() {
   const [upcoming, setUpcoming] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // MongoDB-style query simulation:
-    // db.collection('events').find({ date: { $gte: new Date() } }).sort({ date: 1 }).limit(6)
-    const now = new Date();
-    const result = mockEvents
-      .filter((e) => e.date >= now)
-      .sort((a, b) => a.date - b.date)
-      .slice(0, 6); // .limit(6)
-    setUpcoming(result);
+    const fetchRecentEvents = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/RecentEvents`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch recent events");
+        }
+
+        const data = await response.json();
+
+        // Latest created events first, maximum 6
+        const result = data
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt) - new Date(a.createdAt)
+          )
+          .slice(0, 6);
+
+        setUpcoming(result);
+      } catch (err) {
+        console.error("Recent Events Error:", err);
+        setError("Failed to load recent events.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentEvents();
   }, []);
 
   const formatDate = (date) => {
-    return date.toLocaleDateString("en-US", {
+    return new Date(date).toLocaleDateString("en-US", {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -26,45 +51,78 @@ export default function RecentEvents() {
   };
 
   return (
-    <section id="events" className="py-24 bg-gradient-to-br from-[#6a1b9a] via-[#ab47bc] via-[#ec407a] to-[#ff9800]">
+    <section
+      id="events"
+      className="py-24 bg-gradient-to-br from-[#6a1b9a] via-[#ab47bc] via-[#ec407a] to-[#ff9800]"
+    >
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
+
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">Recent Upcoming Events</h2>
-          <p className="mt-4 text-lg text-white/80">Join us at these community service gatherings</p>
+          <h2 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+            Recent Upcoming Events
+          </h2>
+
+          <p className="mt-4 text-lg text-white/80">
+            Join us at these community service gatherings
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {upcoming.map((event) => (
-            <article
-              key={event._id}
-              className="group bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-[0_4px_30px_rgba(255,255,255,0.05)] hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)] transition-all duration-300 border border-white/10 hover:-translate-y-1 hover:bg-white/15"
-            >
-              <div className="relative h-56 overflow-hidden">
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-purple-900 shadow-sm">
-                  {formatDate(event.date)}
+        {loading ? (
+          <p className="text-center text-white text-lg">
+            Loading recent events...
+          </p>
+        ) : error ? (
+          <p className="text-center text-red-100 text-lg">
+            {error}
+          </p>
+        ) : upcoming.length === 0 ? (
+          <p className="text-center text-white text-lg">
+            No recent events available.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {upcoming.map((event) => (
+              <article
+                key={event._id}
+                className="group bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-[0_4px_30px_rgba(255,255,255,0.05)] hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)] transition-all duration-300 border border-white/10 hover:-translate-y-1 hover:bg-white/15"
+              >
+                <div className="relative h-56 overflow-hidden">
+                  <img
+                    src={event.imageUrl || event.image}
+                    alt={event.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-purple-900 shadow-sm">
+                    {formatDate(event.date)}
+                  </div>
                 </div>
-              </div>
-              <div className="p-7">
-                <h3 className="text-xl font-extrabold text-white mb-2 leading-tight group-hover:text-amber-200 transition-colors">
-                  {event.title}
-                </h3>
-                <p className="text-sm text-amber-200 font-semibold mb-3">{event.location}</p>
-                <p className="text-white/70 text-sm leading-relaxed mb-5">{event.description}</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center text-sm font-bold text-amber-200 hover:text-amber-100 transition-colors"
-                >
-                  Learn more →
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
+
+                <div className="p-7">
+                  <h3 className="text-xl font-extrabold text-white mb-2 leading-tight group-hover:text-amber-200 transition-colors">
+                    {event.title}
+                  </h3>
+
+                  <p className="text-sm text-amber-200 font-semibold mb-3">
+                    {event.location}
+                  </p>
+
+                  <p className="text-white/70 text-sm leading-relaxed mb-5">
+                    {event.description}
+                  </p>
+
+                  <a
+                    href={`/My-events/${event._id}`}
+                    className="inline-flex items-center text-sm font-bold text-amber-200 hover:text-amber-100 transition-colors"
+                  >
+                    Learn more →
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+
       </div>
     </section>
   );
