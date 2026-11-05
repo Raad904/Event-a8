@@ -30,7 +30,7 @@ export default function Footer() {
             <Link href="/" className="text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white text-sm font-medium transition-colors">Home</Link>
             <Link href="/Upcoming-Events" className="text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white text-sm font-medium transition-colors">Upcoming Events</Link>
             <Link href="/Create-event" className="text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white text-sm font-medium transition-colors">Create Event</Link>
-            <Link href="/Login" className="text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white text-sm font-medium transition-colors">Login</Link>
+           
           </nav>
         </div>
 
