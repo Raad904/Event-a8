@@ -82,7 +82,7 @@ export default function GallerySection() {
             {photos.map((photo) => (
               <a
                 key={photo._id}
-                href={`/Upcoming-Events/${photo._id}`}
+                href="#"
                 className="group relative rounded-2xl overflow-hidden shadow-lg dark:shadow-none hover:shadow-2xl dark:hover:shadow-none transition-shadow"
               >
                 <img
