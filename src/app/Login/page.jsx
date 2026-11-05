@@ -62,22 +62,22 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#2d1b4e] via-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] flex items-center justify-center px-6">
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] p-10 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+    <main className="min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#2d1b4e] dark:via-[#4a148c] dark:via-[#9c27b0] dark:via-[#e91e8c] dark:to-[#ff9800] flex items-center justify-center px-6 transition-colors duration-300">
+      <div className="w-full max-w-md bg-white dark:bg-white/10 backdrop-blur-xl dark:backdrop-blur-2xl border border-gray-200 dark:border-white/20 rounded-[2.5rem] p-10 shadow-[0_20px_60px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
 
         {/* Brand */}
         <div className="text-center mb-8">
           <img
             src="/images/logo.png"
             alt="SDEP Logo"
-            className="mx-auto h-14 w-14 drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] mb-3"
+            className="mx-auto h-14 w-14 drop-shadow-[0_0_12px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] mb-3"
           />
 
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
             Welcome back
           </h1>
 
-          <p className="text-white/70 mt-2">
+          <p className="text-gray-600 dark:text-white/70 mt-2">
             sign into organize and join community device
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-semibold text-white/90 mb-2"
+              className="block text-sm font-semibold text-gray-700 dark:text-white/90 mb-2"
             >
               Email
             </label>
@@ -101,7 +101,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-xl px-5 py-3.5 bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent transition-all backdrop-blur-sm"
+              className="w-full rounded-xl px-5 py-3.5 bg-white dark:bg-white/10 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-white/40 focus:border-transparent transition-all backdrop-blur-sm dark:backdrop-blur-sm"
             />
           </div>
 
@@ -109,7 +109,7 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-semibold text-white/90 mb-2"
+              className="block text-sm font-semibold text-gray-700 dark:text-white/90 mb-2"
             >
               Password
             </label>
@@ -122,7 +122,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full rounded-xl px-5 py-3.5 bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent transition-all backdrop-blur-sm"
+              className="w-full rounded-xl px-5 py-3.5 bg-white dark:bg-white/10 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-white/40 focus:border-transparent transition-all backdrop-blur-sm dark:backdrop-blur-sm"
             />
           </div>
 
@@ -130,7 +130,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="block w-full text-center rounded-full bg-white text-purple-900 font-extrabold text-base py-3.5 shadow-[0_8px_25px_rgba(255,255,255,0.3)] hover:bg-white/90 hover:shadow-[0_12px_35px_rgba(255,255,255,0.45)] transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+            className="block w-full text-center rounded-full bg-white text-purple-900 dark:bg-white dark:text-purple-900 font-extrabold text-base py-3.5 shadow-[0_8px_25px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_25px_rgba(255,255,255,0.3)] hover:bg-gray-100 dark:hover:bg-white/90 hover:shadow-[0_12px_35px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_12px_35px_rgba(255,255,255,0.45)] transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
@@ -148,11 +148,11 @@ export default function LoginPage() {
 
         {/* Register link */}
         <div className="mt-6 text-center">
-          <p className="text-white/70 text-sm">
+          <p className="text-gray-600 dark:text-white/70 text-sm">
             Don&apos;t have an account?{" "}
             <a
               href={"/Register"}
-              className="text-amber-200 font-bold hover:text-amber-100 hover:underline transition-colors"
+              className="text-amber-600 dark:text-amber-200 font-bold hover:text-amber-700 dark:hover:text-amber-100 hover:underline transition-colors"
             >
               Register Now
             </a>

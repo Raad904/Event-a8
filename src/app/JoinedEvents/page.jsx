@@ -174,10 +174,11 @@ export default function JoinedEventsPage() {
     }
   };
 
+
   if (isPending || loading) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800]">
-        <p className="text-white text-xl font-bold">
+      <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#4a148c] dark:via-[#9c27b0] dark:via-[#e91e8c] dark:to-[#ff9800] transition-colors duration-300">
+        <p className="text-gray-900 dark:text-white text-xl font-bold">
           Loading Joined Events...
         </p>
       </main>
@@ -187,20 +188,20 @@ export default function JoinedEventsPage() {
   if (!user) return null;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-12">
+    <main className="min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#4a148c] dark:via-[#9c27b0] dark:via-[#e91e8c] dark:to-[#ff9800] px-6 pt-36 pb-12 transition-colors duration-300">
 
       <div className="max-w-6xl mx-auto">
 
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
 
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
             Joined Events
           </h1>
 
           {events.length > 0 && (
             <button
               onClick={handleClearAll}
-              className="bg-red-500 hover:bg-red-600 text-white font-bold px-5 py-3 rounded-full transition-all"
+              className="bg-rose-500 dark:bg-rose-600 text-white font-bold px-5 py-3 rounded-full transition-all"
             >
               Clear All
             </button>
@@ -208,17 +209,17 @@ export default function JoinedEventsPage() {
 
         </div>
 
-        <p className="text-white/70 text-lg mb-12">
+        <p className="text-gray-600 dark:text-white/70 text-lg mb-12">
           Events you have joined
         </p>
 
         {error ? (
-          <div className="text-center text-white py-20">
-            <p className="text-xl text-red-200">{error}</p>
+          <div className="text-center text-gray-900 dark:text-white py-20">
+            <p className="text-xl text-rose-500 dark:text-rose-200">{error}</p>
           </div>
         ) : events.length === 0 ? (
 
-          <div className="text-center text-white/60 py-20">
+          <div className="text-center text-gray-600 dark:text-white/60 py-20">
 
             <p className="text-xl">
               No joined events yet.
@@ -226,7 +227,7 @@ export default function JoinedEventsPage() {
 
             <Link
               href="/My-events"
-              className="inline-block mt-4 text-amber-200 font-bold hover:underline"
+              className="inline-block mt-4 text-amber-600 dark:text-amber-200 font-bold hover:underline"
             >
               Browse events →
             </Link>
@@ -241,7 +242,7 @@ export default function JoinedEventsPage() {
 
               <article
                 key={event._id}
-                className="group bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-[0_4px_30px_rgba(255,255,255,0.05)] hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)] transition-all duration-300 border border-white/10 hover:-translate-y-1"
+                className="group bg-white dark:bg-white/10 backdrop-blur-md dark:backdrop-blur-md rounded-3xl overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_30px_rgba(255,255,255,0.05)] hover:shadow-[0_16px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)] transition-all duration-300 border border-gray-200 dark:border-white/10 hover:-translate-y-1"
               >
 
                 <div className="relative h-48 overflow-hidden">
@@ -255,7 +256,7 @@ export default function JoinedEventsPage() {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
 
-                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-purple-900 shadow-sm">
+                  <div className="absolute top-3 left-3 bg-white dark:bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-purple-700 dark:text-purple-900 shadow-sm">
                     {event.type}
                   </div>
 
@@ -263,19 +264,19 @@ export default function JoinedEventsPage() {
 
                 <div className="p-6">
 
-                  <h3 className="text-xl font-extrabold text-white mb-1">
+                  <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mb-1">
                     {event.title}
                   </h3>
 
-                  <p className="text-sm text-amber-200 font-semibold mb-3">
+                  <p className="text-sm text-amber-600 dark:text-amber-200 font-semibold mb-3">
                     {event.location}
                   </p>
 
-                  <p className="text-xs text-white/50 mb-1">
+                  <p className="text-xs text-gray-500 dark:text-white/50 mb-1">
                     {event.date}
                   </p>
 
-                  <p className="text-white/70 text-sm leading-relaxed mb-5 line-clamp-3">
+                  <p className="text-gray-600 dark:text-white/70 text-sm leading-relaxed mb-5 line-clamp-3">
                     {event.description}
                   </p>
 
@@ -283,7 +284,7 @@ export default function JoinedEventsPage() {
 
                     <button
                       onClick={() => handleRemoveEvent(event.eventId)}
-                      className="rounded-full bg-red-500/80 hover:bg-red-600 text-white font-bold text-xs px-4 py-2.5 transition-all"
+                      className="rounded-full bg-rose-500 dark:bg-rose-600/80 hover:bg-rose-600 dark:hover:bg-rose-700 text-white font-bold text-xs px-4 py-2.5 transition-all"
                     >
                       Remove
                     </button>

@@ -162,7 +162,7 @@ export default function EventDetailsPage() {
   };
   if (loading) {
     return (
-      <div className="min-h-screen bg-purple-900 flex items-center justify-center text-white text-xl">
+      <div className="min-h-screen bg-gray-900 dark:bg-purple-900 flex items-center justify-center text-gray-900 dark:text-white text-xl">
         Loading event details...
       </div>
     );
@@ -170,12 +170,12 @@ export default function EventDetailsPage() {
 
   if (error || !event) {
     return (
-      <div className="min-h-screen bg-purple-900 flex flex-col items-center justify-center text-white gap-4">
+      <div className="min-h-screen bg-gray-900 dark:bg-purple-900 flex flex-col items-center justify-center text-gray-900 dark:text-white gap-4">
         <p>{error || "Event not found."}</p>
 
         <Link
           href="/Upcoming-Events"
-          className="text-amber-200 underline"
+          className="text-amber-600 dark:text-amber-200 underline"
         >
           Back to Upcoming Events
         </Link>
@@ -184,20 +184,21 @@ export default function EventDetailsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-20">
+    <main className="min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#4a148c] dark:via-[#9c27b0] dark:via-[#e91e8c] dark:to-[#ff9800] px-6 pt-36 pb-20 transition-colors duration-300">
       <div className="max-w-4xl mx-auto">
 
-        <article className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+        <article className="bg-white dark:bg-white/10 backdrop-blur-xl dark:backdrop-blur-2xl border border-gray-200 dark:border-white/20 rounded-[2.5rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
 
           {/* Top decorative icon */}
           <div className="flex justify-center pt-10">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#e91e8c] to-[#9c27b0] flex items-center justify-center shadow-[0_8px_25px_rgba(233,30,140,0.35)]">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#e91e8c] to-[#9c27b0] dark:from-[#e91e8c] dark:to-[#9c27b0] flex items-center justify-center shadow-[0_8px_25px_rgba(233,30,140,0.2)] dark:shadow-[0_8px_25px_rgba(233,30,140,0.35)]">
               <svg
                 width="28"
                 height="28"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="white"
+                stroke="currentColor"
+                className="text-gray-900 dark:text-white"
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -212,18 +213,18 @@ export default function EventDetailsPage() {
             <div className="flex items-center justify-center gap-4 mb-3">
               <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#e91e8c]/60" />
 
-              <span className="text-[#e91e8c] text-xs font-extrabold tracking-widest uppercase">
+              <span className="text-[#e91e8c] text-xs font-extrabold tracking-widest uppercase dark:text-[#e91e8c]">
                 Event Details
               </span>
 
               <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#e91e8c]/60" />
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
               {event.title}
             </h1>
 
-            <p className="text-white/70 mt-4 text-base leading-relaxed max-w-xl mx-auto">
+            <p className="text-white/70 mt-4 text-base leading-relaxed max-w-xl mx-auto dark:text-white/70">
               {event.description}
             </p>
           </div>
@@ -233,34 +234,34 @@ export default function EventDetailsPage() {
 
             <div className="p-8 md:p-10 flex flex-col justify-center">
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-3">
                 About This Event
               </h2>
 
-              <div className="space-y-3 text-sm text-white/70 mb-6">
+              <div className="space-y-3 text-sm text-gray-600 dark:text-white/70 mb-6">
 
                 <p>
-                  <span className="font-bold text-white">Type:</span>{" "}
+                  <span className="font-bold text-gray-900 dark:text-white">Type:</span>{" "}
                   {event.type}
                 </p>
 
                 <p>
-                  <span className="font-bold text-white">Date:</span>{" "}
+                  <span className="font-bold text-gray-900 dark:text-white">Date:</span>{" "}
                   {event.date}
                 </p>
 
                 <p>
-                  <span className="font-bold text-white">Location:</span>{" "}
+                  <span className="font-bold text-gray-900 dark:text-white">Location:</span>{" "}
                   {event.location}
                 </p>
 
                 <p>
-                  <span className="font-bold text-white">Image:</span>{" "}
+                  <span className="font-bold text-gray-900 dark:text-white">Image:</span>{" "}
                   <a
                     href={event.imageUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-amber-200 hover:underline"
+                    className="text-amber-600 dark:text-amber-200 hover:underline"
                   >
                     {event.imageUrl}
                   </a>
@@ -270,7 +271,7 @@ export default function EventDetailsPage() {
 
               <Link
                 href="/My-events"
-                className="inline-flex items-center gap-2 text-white font-bold hover:text-amber-200 transition-colors"
+                className="inline-flex items-center gap-2 text-gray-900 dark:text-white font-bold hover:text-amber-600 dark:hover:text-amber-200 transition-colors"
               >
                 ← Back to My Events
               </Link>
@@ -282,12 +283,12 @@ export default function EventDetailsPage() {
                   disabled={isJoined || checkingJoinStatus || !user?.id}
                   className={`mt-4 inline-flex items-center gap-2 rounded-full text-white font-extrabold text-sm px-6 py-3 transition-all
     ${isJoined
-                      ? "bg-gradient-to-r from-emerald-500 to-teal-600 cursor-not-allowed opacity-80"
-                      : checkingJoinStatus || !user?.id
-                        ? "bg-gray-500 cursor-not-allowed opacity-60"
-                        : "bg-gradient-to-r from-[#e91e8c] to-[#9c27b0] hover:shadow-[0_12px_35px_rgba(233,30,140,0.5)]"
-                    }
-  `}
+        ? "bg-gradient-to-r from-emerald-500 to-teal-600 cursor-not-allowed opacity-80"
+        : checkingJoinStatus || !user?.id
+          ? "bg-gray-400 dark:bg-gray-500 cursor-not-allowed opacity-60"
+          : "bg-gradient-to-r from-[#e91e8c] to-[#9c27b0] hover:shadow-[0_12px_35px_rgba(233,30,140,0.5)]"
+      }
+`}
                 >
                   {isJoined
                     ? "Joined Event"
@@ -311,7 +312,7 @@ export default function EventDetailsPage() {
                 className="w-full h-full object-cover"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#4a148c]/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#4a148c]/60 dark:from-[#4a148c]/60 via-transparent to-transparent" />
 
             </div>
           </div>
@@ -322,22 +323,20 @@ export default function EventDetailsPage() {
             <div className="text-center mb-8">
 
               <div className="flex items-center justify-center gap-4 mb-3">
-
                 <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#e91e8c]/60" />
 
-                <span className="text-[#e91e8c] text-xs font-extrabold tracking-widest uppercase">
+                <span className="text-[#e91e8c] text-xs font-extrabold tracking-widest uppercase dark:text-[#e91e8c]">
                   Schedule
                 </span>
 
                 <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#e91e8c]/60" />
-
               </div>
 
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">
+              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                 Schedule of Events
               </h2>
 
-              <p className="text-white/60 mt-3 text-sm">
+              <p className="text-gray-600 dark:text-white/60 mt-3 text-sm">
                 Plan your day with these key activities
               </p>
 
@@ -364,17 +363,17 @@ export default function EventDetailsPage() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-colors"
+                  className="bg-gray-50 dark:bg-white/5 rounded-2xl p-6 border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
                 >
                   <div className="text-[#e91e8c] text-xs font-extrabold tracking-widest mb-2">
                     {item.time}
                   </div>
 
-                  <h3 className="text-lg font-extrabold text-white mb-2">
+                  <h3 className="text-lg font-extrabold text-gray-900 dark:text-white mb-2">
                     {item.title}
                   </h3>
 
-                  <p className="text-sm text-white/60 leading-relaxed">
+                  <p className="text-sm text-gray-600 dark:text-white/60 leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
@@ -386,36 +385,36 @@ export default function EventDetailsPage() {
           {/* Event Info Bottom */}
           <div className="px-8 md:px-12 pb-10">
 
-            <div className="bg-white/5 rounded-2xl px-6 py-5 border border-white/10">
+            <div className="bg-gray-50 dark:bg-white/5 rounded-2xl px-6 py-5 border border-gray-200 dark:border-white/10">
 
               <div className="grid sm:grid-cols-3 gap-6 text-sm">
 
                 <div>
-                  <p className="text-[#e91e8c] font-extrabold mb-1">
+                  <p className="text-[#e91e8c] font-extrabold mb-1 dark:text-[#e91e8c]">
                     Type
                   </p>
 
-                  <p className="text-white font-medium">
+                  <p className="text-gray-900 dark:text-white font-medium">
                     {event.type}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[#e91e8c] font-extrabold mb-1">
+                  <p className="text-[#e91e8c] font-extrabold mb-1 dark:text-[#e91e8c]">
                     Date
                   </p>
 
-                  <p className="text-white font-medium">
+                  <p className="text-gray-900 dark:text-white font-medium">
                     {event.date}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[#e91e8c] font-extrabold mb-1">
+                  <p className="text-[#e91e8c] font-extrabold mb-1 dark:text-[#e91e8c]">
                     Location
                   </p>
 
-                  <p className="text-white font-medium">
+                  <p className="text-gray-900 dark:text-white font-medium">
                     {event.location}
                   </p>
                 </div>

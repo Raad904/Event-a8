@@ -51,30 +51,30 @@ export default function GallerySection() {
   return (
     <section
       id="gallery"
-      className="py-24 bg-gradient-to-br from-[#3e1f5a] via-[#6d2c7a] to-[#a0522d]"
+      className="py-24 bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#3e1f5a] dark:via-[#6d2c7a] dark:to-[#a0522d]"
     >
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
 
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
             Community Moments
           </h2>
 
-          <p className="mt-4 text-lg text-purple-200/80">
+          <p className="mt-4 text-lg text-gray-600 dark:text-purple-200/80">
             Snapshots from our service events
           </p>
         </div>
 
         {loading ? (
-          <p className="text-center text-white text-lg">
+          <p className="text-center text-gray-700 dark:text-white text-lg">
             Loading gallery...
           </p>
         ) : error ? (
-          <p className="text-center text-red-200 text-lg">
+          <p className="text-center text-rose-500 dark:text-red-200 text-lg">
             {error}
           </p>
         ) : photos.length === 0 ? (
-          <p className="text-center text-white text-lg">
+          <p className="text-center text-gray-700 dark:text-white text-lg">
             No past event photos available.
           </p>
         ) : (
@@ -83,7 +83,7 @@ export default function GallerySection() {
               <a
                 key={photo._id}
                 href={`/Upcoming-Events/${photo._id}`}
-                className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow"
+                className="group relative rounded-2xl overflow-hidden shadow-lg dark:shadow-none hover:shadow-2xl dark:hover:shadow-none transition-shadow"
               >
                 <img
                   src={photo.imageUrl || photo.image}
@@ -91,16 +91,15 @@ export default function GallerySection() {
                   className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#4a148c]/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#4a148c]/80 dark:from-[#4a148c]/80 via-transparent to-transparent" />
 
-                <div className="absolute bottom-4 left-4 text-white font-bold text-lg drop-shadow-md">
+                <div className="absolute bottom-4 left-4 text-gray-900 dark:text-white font-bold text-lg drop-shadow-md">
                   {photo.title}
                 </div>
               </a>
             ))}
           </div>
         )}
-
       </div>
     </section>
   );

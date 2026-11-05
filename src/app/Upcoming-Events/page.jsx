@@ -112,15 +112,15 @@ export default function UpcomingEventsPage() {
   }, [upcoming, selectedCategory, searchQuery]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-4 py-30 sm:px-6">
+    <main className="min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#4a148c] dark:via-[#9c27b0] dark:via-[#e91e8c] dark:to-[#ff9800] px-4 py-30 sm:px-6 transition-colors duration-300">
       <div className="mx-auto max-w-6xl">
         {/* Page Heading */}
         <div className="mb-10 text-center sm:mb-14">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.35)] sm:text-5xl md:text-6xl">
+          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.1)] dark:drop-shadow-[0_8px_30px_rgba(0,0,0,0.35)] sm:text-5xl md:text-6xl">
             Upcoming Events
           </h1>
 
-          <p className="mx-auto mt-4 max-w-xl text-lg text-white/80 sm:text-xl">
+          <p className="mx-auto mt-4 max-w-xl text-lg text-gray-600 dark:text-white/80 sm:text-xl">
             Join our community service gatherings
           </p>
         </div>
@@ -136,7 +136,7 @@ export default function UpcomingEventsPage() {
                 onClick={() => setSelectedCategory(category)}
                 className={`shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition-all duration-200 sm:text-sm ${selectedCategory === category
                     ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/20"
-                    : "border border-white/20 bg-white/10 text-white/90 hover:bg-white/20"
+                    : "border border-gray-300 dark:border-white/20 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-white/90 hover:bg-gray-200 dark:hover:bg-white/20"
                   }`}
               >
                 {category}
@@ -148,7 +148,7 @@ export default function UpcomingEventsPage() {
           <div className="relative w-full shrink-0 lg:w-64 xl:w-72">
             <Search
               size={18}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-white/70"
             />
 
             <input
@@ -157,33 +157,33 @@ export default function UpcomingEventsPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search events..."
               aria-label="Search events by title or location"
-              className="w-full rounded-xl border border-emerald-300/80 bg-white/10 py-2.5 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-white/60 focus:border-emerald-300 focus:ring-2 focus:ring-emerald-300/20"
+              className="w-full rounded-xl border border-gray-300 dark:border-emerald-300/80 bg-white dark:bg-white/10 py-2.5 pl-10 pr-4 text-gray-900 dark:text-white outline-none transition placeholder:text-gray-400 dark:placeholder:text-white/60 focus:border-emerald-500 dark:focus:border-emerald-300 focus:ring-2 focus:ring-emerald-300/20"
             />
           </div>
         </div>
 
         {/* Loading State */}
         {loading && (
-          <div className="py-20 text-center text-lg text-white">
+          <div className="py-20 text-center text-lg text-gray-700 dark:text-white">
             Loading events...
           </div>
         )}
 
         {/* Error State */}
         {!loading && error && (
-          <div className="py-20 text-center text-lg text-white">
+          <div className="py-20 text-center text-lg text-gray-700 dark:text-white">
             {error}
           </div>
         )}
 
         {/* Empty State */}
         {!loading && !error && filteredEvents.length === 0 && (
-          <div className="rounded-3xl border border-white/10 bg-white/10 p-10 text-center backdrop-blur-md">
-            <h2 className="text-2xl font-bold text-white">
+          <div className="rounded-3xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/10 p-10 text-center backdrop-blur-md dark:backdrop-blur-md">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               No Events Found
             </h2>
 
-            <p className="mt-3 text-white/70">
+            <p className="mt-3 text-gray-600 dark:text-white/70">
               No upcoming events match your selected category or search.
             </p>
 
@@ -193,7 +193,7 @@ export default function UpcomingEventsPage() {
                 setSelectedCategory("All");
                 setSearchQuery("");
               }}
-              className="mt-5 rounded-full bg-white px-5 py-2 text-sm font-bold text-purple-800 transition hover:bg-white/80"
+              className="mt-5 rounded-full bg-white dark:bg-white text-gray-900 dark:text-purple-800 px-5 py-2 text-sm font-bold transition hover:bg-gray-100 dark:hover:bg-white/80"
             >
               Clear Filters
             </button>
@@ -203,7 +203,7 @@ export default function UpcomingEventsPage() {
         {/* Event Cards */}
         {!loading && !error && filteredEvents.length > 0 && (
           <>
-            <div className="mb-5 text-sm text-white/75">
+            <div className="mb-5 text-sm text-gray-600 dark:text-white/75">
               Showing {filteredEvents.length} of up to 6 events
             </div>
 
@@ -211,7 +211,7 @@ export default function UpcomingEventsPage() {
               {filteredEvents.map((event) => (
                 <article
                   key={event._id}
-                  className="group overflow-hidden rounded-3xl border border-white/10 bg-white/10 shadow-[0_4px_30px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)]"
+                  className="group overflow-hidden rounded-3xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_30px_rgba(255,255,255,0.05)] backdrop-blur-md dark:backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-gray-50 dark:hover:bg-white/15 hover:shadow-[0_16px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)]"
                 >
                   {/* Event Image */}
                   <div className="relative h-56 overflow-hidden">
@@ -222,13 +222,13 @@ export default function UpcomingEventsPage() {
                     />
 
                     {/* Event Date */}
-                    <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-purple-900 shadow-sm backdrop-blur-sm">
+                    <div className="absolute left-4 top-4 rounded-full bg-white dark:bg-white/90 px-3 py-1 text-xs font-bold text-purple-700 dark:text-purple-900 shadow-sm backdrop-blur-sm">
                       {formatDate(event.date)}
                     </div>
 
                     {/* Category Badge */}
                     {(event.type || event.category) && (
-                      <div className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-purple-900 shadow-sm">
+                      <div className="absolute right-4 top-4 rounded-full bg-white dark:bg-white/90 px-3 py-1 text-xs font-bold text-purple-700 dark:text-purple-900 shadow-sm">
                         {event.type || event.category}
                       </div>
                     )}
@@ -236,21 +236,21 @@ export default function UpcomingEventsPage() {
 
                   {/* Event Information */}
                   <div className="p-7">
-                    <h3 className="mb-2 text-xl font-extrabold leading-tight text-white transition-colors group-hover:text-amber-200">
+                    <h3 className="mb-2 text-xl font-extrabold leading-tight text-gray-900 dark:text-white transition-colors group-hover:text-amber-600 dark:group-hover:text-amber-200">
                       {event.title}
                     </h3>
 
-                    <p className="mb-3 text-sm font-semibold text-amber-200">
+                    <p className="mb-3 text-sm font-semibold text-amber-600 dark:text-amber-200">
                       {event.location}
                     </p>
 
-                    <p className="mb-5 text-sm leading-relaxed text-white/70">
+                    <p className="mb-5 text-sm leading-relaxed text-gray-600 dark:text-white/70">
                       {event.description}
                     </p>
 
                     <a
                        href={`/My-events/${event._id}`}
-                      className="inline-flex items-center text-sm font-bold text-amber-200 transition-colors hover:text-amber-100"
+                      className="inline-flex items-center text-sm font-bold text-amber-600 dark:text-amber-200 transition-colors hover:text-amber-700 dark:hover:text-amber-100"
                     >
                       Learn more →
                     </a>

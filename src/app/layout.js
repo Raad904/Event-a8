@@ -3,7 +3,9 @@ import "./globals.css";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Foder.jsx";
 import ProfileDropdown from "../components/ProfileDropdown.jsx";
+import { ThemeProvider } from "../components/ThemeProvider";
 import { Toaster } from "sonner";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 const lora = Lora({
   variable: "--font-geist-sans",
@@ -19,9 +21,10 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${lora.className} h-full antialiased`}
+      className={`${lora.className} h-full antialiased scroll-smooth`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col transition-colors duration-300">
         {/* Global Sonner Toast */}
         <Toaster
           position="top-right"
@@ -30,12 +33,17 @@ export default function RootLayout({ children }) {
           duration={3000}
         />
 
-        <Navbar />
-        <ProfileDropdown />
+        <ThemeProvider>
+          <Navbar />
+          <ProfileDropdown />
+          <div className="fixed top-8 right-22 z-[60]">
+            <ThemeToggle />
+          </div>
 
-        <main className="flex-1">{children}</main>
+          <main className="flex-1">{children}</main>
 
-        <Footer />
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

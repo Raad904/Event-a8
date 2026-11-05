@@ -39,6 +39,16 @@ There is NO test script and no test directory. Do not add test commands without 
 - Most pages call `fetch(`${process.env.NEXT_PUBLIC_API_URL}/...`)`, but `src/app/JoinedEvents/page.jsx` and `src/app/Upcoming-Events/[id]/page.jsx` still hardcode `http://localhost:5000`. Prefer the env var when touching these files.
 - `.env` contains real secrets (`BETTER_AUTH_SECRET`, `MONGODB_URL`) and is NOT committed (`.gitignore` excludes `.env*`). Client-side vars need the `NEXT_PUBLIC_` prefix. Do not commit new secrets without flagging it.
 
+## Theme system (next-themes)
+
+- `next-themes` is installed and configured via `src/components/ThemeProvider.jsx` (`defaultTheme: "dark"`, `storageKey: "theme"`, `attribute: "class"`, `enableSystem: false`).
+- `layout.js` wraps `<Navbar />`, `<ProfileDropdown />`, `<main>`, and `<Footer />` in `ThemeProvider`. The `html` tag gets `scroll-smooth`; `body` gets `transition-colors duration-300`.
+- `src/components/ThemeToggle.jsx` renders a Sun (light) / Moon (dark) icon button using lucide-react. It's placed inside `ProfileDropdown.jsx` (after the user info divider).
+- Default theme is **Dark** — existing purple/pink/orange gradient design is preserved as `dark:` variants.
+- Light mode uses white/light gray backgrounds, dark text (`text-gray-900`), and soft purple accents.
+- All pages and reusable components have been updated with `dark:` variants for dark mode and light-mode base classes. Smooth `transition-colors duration-300` applied globally via `globals.css`.
+- Theme persists in `localStorage` via `next-themes`; no flicker mitigation script beyond `defaultTheme="dark"` SSR.
+
 ## Gotchas
 
 - Font naming is misleading: `layout.js` loads **Lora** (a serif) and applies it site-wide via `lora.className`, but registers it as CSS var `--font-geist-sans` and never applies `lora.variable` (so that var never reaches the page). `globals.css` sets `--font-mono: var(--font-geist-mono)`, which is defined nowhere — `font-mono` falls back. Don't assume Geist is loaded.

@@ -1,11 +1,10 @@
 "use client";
 
-
-
 import Link from "next/link";
 import { DialogDemo } from "../../components/EditEventDialog.jsx";
 import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth-client";
+import { toast } from "sonner";
 
 export default function MyEventsPage() {
     const [events, setEvents] = useState([]);
@@ -83,8 +82,8 @@ export default function MyEventsPage() {
 
     if (loading) {
         return (
-            <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-12">
-                <p className="text-center text-white text-xl">
+            <main className="min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#4a148c] dark:via-[#9c27b0] dark:via-[#e91e8c] dark:to-[#ff9800] px-6 pt-36 pb-12 transition-colors duration-300">
+                <p className="text-center text-gray-900 dark:text-white text-xl">
                     Loading events...
                 </p>
             </main>
@@ -93,30 +92,30 @@ export default function MyEventsPage() {
 
     if (error) {
         return (
-            <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-12">
-                <p className="text-center text-white text-xl">{error}</p>
+            <main className="min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#4a148c] dark:via-[#9c27b0] dark:via-[#e91e8c] dark:to-[#ff9800] px-6 pt-36 pb-12 transition-colors duration-300">
+                <p className="text-center text-gray-900 dark:text-white text-xl">{error}</p>
             </main>
         );
     }
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-[#4a148c] via-[#9c27b0] via-[#e91e8c] to-[#ff9800] px-6 pt-36 pb-12 ">
+        <main className="min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f3e8ff] via-[#fce7f3] to-[#ffedd5] dark:bg-gradient-to-br dark:from-[#4a148c] dark:via-[#9c27b0] dark:via-[#e91e8c] dark:to-[#ff9800] px-6 pt-36 pb-12 transition-colors duration-300">
             <div className="max-w-6xl mx-auto">
-                <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
                     My Events
                 </h1>
 
-                <p className="text-white/70 text-lg mb-12">
+                <p className="text-gray-600 dark:text-white/70 text-lg mb-12">
                     Events you have created
                 </p>
 
                 {events.length === 0 ? (
-                    <div className="text-center text-white/60 py-20">
+                    <div className="text-center text-gray-600 dark:text-white/60 py-20">
                         <p className="text-xl">No events created yet.</p>
 
                         <a
                             href="/Create-event"
-                            className="inline-block mt-4 text-amber-200 font-bold hover:underline"
+                            className="inline-block mt-4 text-amber-600 dark:text-amber-200 font-bold hover:underline"
                         >
                             Create one →
                         </a>
@@ -126,7 +125,7 @@ export default function MyEventsPage() {
                         {events.map((event) => (
                             <article
                                 key={event._id}
-                                className="group bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden shadow-[0_4px_30px_rgba(255,255,255,0.05)] hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)] transition-all duration-300 border border-white/10 hover:-translate-y-1"
+                                className="group bg-white dark:bg-white/10 backdrop-blur-md dark:backdrop-blur-md rounded-3xl overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_30px_rgba(255,255,255,0.05)] hover:shadow-[0_16px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_16px_50px_rgba(255,255,255,0.15)] transition-all duration-300 border border-gray-200 dark:border-white/10 hover:-translate-y-1"
                             >
                                 <div className="relative h-48 overflow-hidden">
                                     <img
@@ -138,25 +137,25 @@ export default function MyEventsPage() {
                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                     />
 
-                                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-purple-900 shadow-sm">
+                                    <div className="absolute top-3 left-3 bg-white dark:bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-purple-700 dark:text-purple-900 shadow-sm">
                                         {event.type}
                                     </div>
                                 </div>
 
                                 <div className="p-6">
-                                    <h3 className="text-xl font-extrabold text-white mb-1">
+                                    <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mb-1">
                                         {event.title}
                                     </h3>
 
-                                    <p className="text-sm text-amber-200 font-semibold mb-3">
+                                    <p className="text-sm text-amber-600 dark:text-amber-200 font-semibold mb-3">
                                         {event.location}
                                     </p>
 
-                                    <p className="text-xs text-white/50 mb-1">
+                                    <p className="text-xs text-gray-500 dark:text-white/50 mb-1">
                                         {event.date}
                                     </p>
 
-                                    <p className="text-white/70 text-sm leading-relaxed mb-5 line-clamp-3">
+                                    <p className="text-gray-600 dark:text-white/70 text-sm leading-relaxed mb-5 line-clamp-3">
                                         {event.description}
                                     </p>
 
@@ -164,9 +163,7 @@ export default function MyEventsPage() {
                                         {/* View Button */}
                                         <Link
                                             href={`/My-events/${event._id}`}
-                                            className="shrink-0 rounded-full border border-white/20
-    bg-white/10 px-3 py-2 text-xs font-bold text-white
-    transition hover:bg-white/20"
+                                            className="shrink-0 rounded-full border border-gray-300 dark:border-white/20 bg-white dark:bg-white/10 px-3 py-2 text-xs font-bold text-gray-700 dark:text-white transition hover:bg-gray-100 dark:hover:bg-white/20"
                                         >
                                             View
                                         </Link>
@@ -190,15 +187,11 @@ export default function MyEventsPage() {
                                         {/* Delete Button */}
                                         <button
                                             onClick={() => deleteEvent(event._id)}
-                                            className="shrink-0 rounded-full bg-pink-600
-    px-3 py-2 text-xs font-bold text-white
-    transition hover:bg-pink-700"
+                                            className="shrink-0 rounded-full bg-rose-500 dark:bg-rose-600 px-3 py-2 text-xs font-bold text-white transition hover:bg-rose-600 dark:hover:bg-rose-700"
                                         >
                                             Delete
                                         </button>
                                     </div>
-
-
                                 </div>
                             </article>
                         ))}

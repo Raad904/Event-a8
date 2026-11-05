@@ -128,11 +128,7 @@ export function DialogDemo({ event, onUpdated }) {
           setError("");
           setOpen(true);
         }}
-        className="w-full rounded-full border border-white/15
-bg-white/10 px-3 py-2 text-xs font-bold text-white
-text-center backdrop-blur-xl transition-all duration-300
-hover:border-white/30 hover:bg-white/20
-hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
+        className="w-full rounded-full border border-gray-300 dark:border-white/15 bg-white dark:bg-white/10 px-3 py-2 text-xs font-bold text-gray-700 dark:text-white text-center backdrop-blur-xl dark:backdrop-blur-xl transition-all duration-300 hover:border-gray-400 dark:hover:border-white/30 hover:bg-gray-100 dark:hover:bg-white/20 hover:shadow-[0_0_18px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
       >
         Edit
       </button>
@@ -142,9 +138,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
         mounted &&
         createPortal(
           <div
-            className="fixed inset-0 z-[99999] flex items-center
-            justify-center overflow-y-auto bg-[#10071d]/75
-            px-4 py-6 backdrop-blur-xl sm:px-6"
+            className="fixed inset-0 z-[99999] flex items-center justify-center overflow-y-auto bg-gray-900/75 dark:bg-[#10071d]/75 px-4 py-6 backdrop-blur-xl dark:backdrop-blur-xl sm:px-6"
             onMouseDown={(e) => {
               if (e.target === e.currentTarget) {
                 closeDialog();
@@ -153,10 +147,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
           >
             {/* Background glow */}
             <div
-              className="pointer-events-none fixed left-1/2 top-1/2
-              h-[500px] w-[500px] -translate-x-1/2
-              -translate-y-1/2 rounded-full bg-purple-600/20
-              blur-[120px]"
+              className="pointer-events-none fixed left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-600/20 dark:bg-purple-600/20 blur-[120px]"
             />
 
             {/* Modal card */}
@@ -164,36 +155,24 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
               role="dialog"
               aria-modal="true"
               aria-labelledby="edit-event-title"
-              className="relative my-auto w-full max-w-2xl
-              overflow-hidden rounded-[2rem]
-              border border-white/15
-              bg-gradient-to-br from-[#29143f]/95
-              via-[#1d1230]/95 to-[#35102f]/95
-              shadow-[0_25px_100px_rgba(0,0,0,0.55)]
-              backdrop-blur-2xl"
+              className="relative my-auto w-full max-w-2xl overflow-hidden rounded-[2rem] border border-gray-200 dark:border-white/15 bg-gradient-to-br from-gray-50/95 dark:from-[#29143f]/95 via-gray-100/95 dark:via-[#1d1230]/95 to-white/95 dark:to-[#35102f]/95 shadow-[0_25px_100px_rgba(0,0,0,0.2)] dark:shadow-[0_25px_100px_rgba(0,0,0,0.55)] backdrop-blur-xl dark:backdrop-blur-2xl"
             >
               {/* Top gradient line */}
               <div
-                className="h-1 w-full bg-gradient-to-r
-                from-purple-500 via-pink-500 to-orange-400"
+                className="h-1 w-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400"
               />
 
               {/* Header */}
               <div
-                className="flex items-start justify-between gap-4
-                border-b border-white/10 px-6 py-6
-                sm:px-9 sm:py-7"
+                className="flex items-start justify-between gap-4 border-b border-gray-200 dark:border-white/10 px-6 py-6 sm:px-9 sm:py-7"
               >
                 <div>
                   <div
-                    className="mb-3 inline-flex items-center gap-2
-                    rounded-full border border-purple-300/20
-                    bg-purple-400/10 px-3 py-1.5"
+                    className="mb-3 inline-flex items-center gap-2 rounded-full border border-purple-200 dark:border-purple-300/20 bg-purple-100 dark:bg-purple-400/10 px-3 py-1.5"
                   >
                     <span className="h-2 w-2 rounded-full bg-pink-400" />
                     <span
-                      className="text-[10px] font-extrabold
-                      uppercase tracking-[0.2em] text-purple-200"
+                      className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-purple-700 dark:text-purple-200"
                     >
                       Event Management
                     </span>
@@ -201,13 +180,12 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
 
                   <h2
                     id="edit-event-title"
-                    className="text-2xl font-extrabold
-                    tracking-tight text-white sm:text-3xl"
+                    className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-3xl"
                   >
                     Edit Event
                   </h2>
 
-                  <p className="mt-2 text-sm leading-relaxed text-white/60">
+                  <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-white/60">
                     Update your community event information.
                   </p>
                 </div>
@@ -217,13 +195,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                   onClick={closeDialog}
                   disabled={saving}
                   aria-label="Close dialog"
-                  className="flex h-10 w-10 shrink-0 items-center
-                  justify-center rounded-full border
-                  border-white/10 bg-white/5 text-2xl
-                  text-white/70 transition-all
-                  hover:rotate-90 hover:border-pink-400/40
-                  hover:bg-pink-500/15 hover:text-white
-                  disabled:opacity-50"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-2xl text-gray-600 dark:text-white/70 transition-all hover:rotate-90 hover:border-pink-400/40 hover:bg-gray-100 dark:hover:bg-pink-500/15 hover:text-white disabled:opacity-50"
                 >
                   ×
                 </button>
@@ -238,8 +210,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                 <div>
                   <label
                     htmlFor={`edit-title-${event?._id || event?.id}`}
-                    className="mb-2 block text-xs font-bold
-                    uppercase tracking-wider text-white/80"
+                    className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-white/80"
                   >
                     Event Title *
                   </label>
@@ -252,14 +223,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                     value={form.title}
                     onChange={handleChange}
                     placeholder="Enter event title"
-                    className="w-full rounded-xl border
-                    border-white/10 bg-white/[0.06]
-                    px-4 py-3 text-sm text-white
-                    outline-none transition-all
-                    placeholder:text-white/30
-                    focus:border-purple-400/70
-                    focus:bg-white/[0.09]
-                    focus:ring-2 focus:ring-purple-500/20"
+                    className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.06] px-4 py-3 text-sm text-gray-900 dark:text-white outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-purple-400/70 focus:bg-white dark:focus:bg-white/[0.09] focus:ring-2 focus:ring-purple-500/20"
                   />
                 </div>
 
@@ -268,8 +232,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                   <div>
                     <label
                       htmlFor={`edit-type-${event?._id || event?.id}`}
-                      className="mb-2 block text-xs font-bold
-                      uppercase tracking-wider text-white/80"
+                      className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-white/80"
                     >
                       Event Type
                     </label>
@@ -279,12 +242,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                       name="type"
                       value={form.type}
                       onChange={handleChange}
-                      className="w-full rounded-xl border
-                      border-white/10 bg-[#251535]
-                      px-4 py-3 text-sm text-white
-                      outline-none transition-all
-                      focus:border-purple-400/70
-                      focus:ring-2 focus:ring-purple-500/20"
+                      className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-[#251535] px-4 py-3 text-sm text-gray-900 dark:text-white outline-none transition-all focus:border-purple-400/70 focus:ring-2 focus:ring-purple-500/20"
                     >
                       {[
                         "Donation",
@@ -306,8 +264,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                   <div>
                     <label
                       htmlFor={`edit-date-${event?._id || event?.id}`}
-                      className="mb-2 block text-xs font-bold
-                      uppercase tracking-wider text-white/80"
+                      className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-white/80"
                     >
                       Event Date
                     </label>
@@ -318,12 +275,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                       type="date"
                       value={form.date}
                       onChange={handleChange}
-                      className="w-full min-w-0 rounded-xl
-                      border border-white/10 bg-white/[0.06]
-                      px-4 py-3 text-sm text-white
-                      outline-none transition-all
-                      focus:border-purple-400/70
-                      focus:ring-2 focus:ring-purple-500/20"
+                      className="w-full min-w-0 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.06] px-4 py-3 text-sm text-gray-900 dark:text-white outline-none transition-all focus:border-purple-400/70 focus:ring-2 focus:ring-purple-500/20"
                     />
                   </div>
                 </div>
@@ -332,8 +284,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                 <div>
                   <label
                     htmlFor={`edit-location-${event?._id || event?.id}`}
-                    className="mb-2 block text-xs font-bold
-                    uppercase tracking-wider text-white/80"
+                    className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-white/80"
                   >
                     Location
                   </label>
@@ -345,13 +296,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                     value={form.location}
                     onChange={handleChange}
                     placeholder="Enter event location"
-                    className="w-full rounded-xl border
-                    border-white/10 bg-white/[0.06]
-                    px-4 py-3 text-sm text-white
-                    outline-none transition-all
-                    placeholder:text-white/30
-                    focus:border-purple-400/70
-                    focus:ring-2 focus:ring-purple-500/20"
+                    className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.06] px-4 py-3 text-sm text-gray-900 dark:text-white outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-purple-400/70 focus:ring-2 focus:ring-purple-500/20"
                   />
                 </div>
 
@@ -359,8 +304,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                 <div>
                   <label
                     htmlFor={`edit-image-${event?._id || event?.id}`}
-                    className="mb-2 block text-xs font-bold
-                    uppercase tracking-wider text-white/80"
+                    className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-white/80"
                   >
                     Thumbnail Image URL
                   </label>
@@ -372,13 +316,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                     value={form.imageUrl}
                     onChange={handleChange}
                     placeholder="https://example.com/image.jpg"
-                    className="w-full rounded-xl border
-                    border-white/10 bg-white/[0.06]
-                    px-4 py-3 text-sm text-white
-                    outline-none transition-all
-                    placeholder:text-white/30
-                    focus:border-purple-400/70
-                    focus:ring-2 focus:ring-purple-500/20"
+                    className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.06] px-4 py-3 text-sm text-gray-900 dark:text-white outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-purple-400/70 focus:ring-2 focus:ring-purple-500/20"
                   />
                 </div>
 
@@ -386,8 +324,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                 <div>
                   <label
                     htmlFor={`edit-description-${event?._id || event?.id}`}
-                    className="mb-2 block text-xs font-bold
-                    uppercase tracking-wider text-white/80"
+                    className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-white/80"
                   >
                     Description
                   </label>
@@ -399,13 +336,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                     value={form.description}
                     onChange={handleChange}
                     placeholder="Describe your community event..."
-                    className="w-full resize-y rounded-xl
-                    border border-white/10 bg-white/[0.06]
-                    px-4 py-3 text-sm leading-relaxed text-white
-                    outline-none transition-all
-                    placeholder:text-white/30
-                    focus:border-purple-400/70
-                    focus:ring-2 focus:ring-purple-500/20"
+                    className="w-full resize-y rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.06] px-4 py-3 text-sm leading-relaxed text-gray-900 dark:text-white outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-purple-400/70 focus:ring-2 focus:ring-purple-500/20"
                   />
                 </div>
 
@@ -413,8 +344,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                 {error && (
                   <p
                     role="alert"
-                    className="rounded-xl border border-red-400/20
-                    bg-red-500/10 px-4 py-3 text-sm text-red-200"
+                    className="rounded-xl border border-rose-400/20 bg-rose-50 dark:bg-rose-500/10 px-4 py-3 text-sm text-rose-700 dark:text-rose-200"
                   >
                     {error}
                   </p>
@@ -422,19 +352,13 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
 
                 {/* Footer */}
                 <div
-                  className="flex flex-col-reverse gap-3
-                  border-t border-white/10 pt-5
-                  sm:flex-row sm:justify-end"
+                  className="flex flex-col-reverse gap-3 border-t border-gray-200 dark:border-white/10 pt-5 sm:flex-row sm:justify-end"
                 >
                   <button
                     type="button"
                     onClick={closeDialog}
                     disabled={saving}
-                    className="rounded-full border
-                    border-white/15 bg-white/5 px-6 py-3
-                    text-sm font-bold text-white/80
-                    transition-all hover:bg-white/10
-                    hover:text-white disabled:opacity-50"
+                    className="rounded-full border border-gray-200 dark:border-white/15 bg-white dark:bg-white/5 px-6 py-3 text-sm font-bold text-gray-700 dark:text-white/80 transition-all hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white disabled:opacity-50"
                   >
                     Cancel
                   </button>
@@ -442,13 +366,7 @@ hover:shadow-[0_0_18px_rgba(168,85,247,0.25)]"
                   <button
                     type="submit"
                     disabled={saving}
-                    className="rounded-full bg-white px-7 py-3
-                    text-sm font-extrabold text-purple-900
-                    shadow-[0_4px_20px_rgba(255,255,255,0.15)]
-                    transition-all hover:-translate-y-0.5
-                    hover:bg-purple-100
-                    hover:shadow-[0_6px_25px_rgba(168,85,247,0.3)]
-                    disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-full bg-white px-7 py-3 text-sm font-extrabold text-purple-900 shadow-[0_4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_20px_rgba(255,255,255,0.15)] transition-all hover:-translate-y-0.5 hover:bg-gray-100 dark:hover:bg-purple-100 hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_6px_25px_rgba(168,85,247,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {saving ? "Saving Changes..." : "Save Changes"}
                   </button>
