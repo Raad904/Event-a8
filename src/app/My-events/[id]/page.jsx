@@ -30,7 +30,11 @@ export default function EventDetailsPage() {
         setError("");
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/my-event/${id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/my-event/${id}`,{
+            headers:{
+              authorization: 'user logged in'
+            }
+          }
         );
 
         if (!res.ok) {
