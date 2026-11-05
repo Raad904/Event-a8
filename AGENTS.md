@@ -8,16 +8,41 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## High-signal repo facts
+## Commands
 
-- Next.js 16.4.3 + React 19.3.0. App Router; pages live under `src/app/*/page.jsx`.
-- `tsx: false` in `components.json`: everything is `.js`/`.jsx`, no TypeScript. Path alias `@/*` → `src/*` (`jsconfig.json`).
-- Tailwind v4 with `@tailwindcss/turbopack`. CSS entry is `src/app/globals.css` (imports `tailwindcss`, `tw-animate-css`, `shadcn/tailwind.css`).
-- `next.config.mjs`: `reactCompiler: true` (babel-plugin-react-compiler is a devDependency), `cacheComponents: false`, `partialPrefetching: false`, `turbopack` css loader rule, and `turbopack.resolveAlias` mapping `@/lib/auth` → `./src/lib/auth.js`.
-- `eslint.config.mjs` uses `eslint-config-next/core-web-vitals`; ignores `.next/`, `out/`, `build/`, `next-env.d.ts`.
-- Scripts (`package.json`): `dev` (`next dev`), `build` (`next build`), `start` (`next start`), `lint` (`eslint`). There is NO test script and no test directory.
-- `.env` is present locally with real secrets (`BETTER_AUTH_SECRET`, `NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000`, `MONGODB_URL`). It is NOT committed (`.gitignore` excludes .env*). Client-side env vars need the `NEXT_PUBLIC_` prefix. Do not commit new secrets without flagging it.
-- Auth: `better-auth` + `@better-auth/mongo-adapter` (`src/lib/auth.js` creates `new MongoClient(process.env.MONGODB_URL)`, db name `Event`). Auth handler: `src/app/api/auth/[...all]/route.js`. Client: `src/lib/auth-client.js` exports `authClient` (with `baseURL`) and a second bare `createAuthClient()` call missing `baseURL` (likely bug).
-- Frontend calls a separate backend on `http://localhost:5000`, hardcoded in `Create-event/page.jsx`, `My-events/page.jsx`, `My-events/[id]/page.jsx`, `Upcoming-Events/page.jsx`, and `components/EditEventDialog.jsx`. `src/lib/mockEvents.js` holds mock event data.
-- Component ownership: `src/components/ui/` = shadcn-style `.jsx`; `src/components/` = page sections; `src/app/*/page.jsx` = route pages; only `layout.js` and `app/page.js` are `.js` at the app root.
-- Font gotcha: `layout.js` imports `Lora` but assigns it to CSS var `--font-geist-sans`; CSS uses `--font-geist-sans` / `--font-geist-mono`.
+- `npm run dev` — dev server on http://localhost:3000 (Turbopack)
+- `npm run build` — `next build` (React Compiler enabled). This is the **real verification gate** (no tests exist); it passes on the current tree — run it after meaningful changes.
+- `npm run start` — `next start` (production)
+- `npm run lint` — `eslint` (config: `eslint.config.mjs`, extends `eslint-config-next/core-web-vitals`). **Fails on a clean checkout**: ~8 pre-existing errors (`react-hooks/set-state-in-effect`, `@next/next/no-html-link-for-pages`) plus many `no-img-element` warnings. That is baseline — don't attribute it to your change, and don't mass-fix unrelated lint errors unasked.
+
+There is NO test script and no test directory. Do not add test commands without agreeing on a test runner first.
+
+## Stack & file conventions
+
+- Next.js 16.4.3 + React 19.3.0, App Router. Pages live under `src/app/*/page.jsx`.
+- Everything is `.js`/`.jsx` — `components.json` has `tsx: false`. A `tsconfig.json` exists but lists no TS sources (only `src/lib/auth.js`) and sets `strict: false`. Do not introduce TypeScript.
+- Path alias `@/*` → `src/*` (`jsconfig.json`; `next.config.mjs` also maps `@/lib/auth` → `./src/lib/auth.js`).
+- Tailwind v4 via `@tailwindcss/turbopack`. CSS entry: `src/app/globals.css` (imports `tailwindcss`, `tw-animate-css`, `shadcn/tailwind.css`).
+- `reactCompiler: true` in `next.config.mjs`; `babel-plugin-react-compiler` is a devDependency. `cacheComponents: false`, `partialPrefetching: false`.
+- Component ownership: `src/components/ui/` = shadcn-style `.jsx`; `src/components/` = page sections; `src/app/*/page.jsx` = route pages. Only `layout.js` and `app/page.js` are `.js` at the app root.
+- Route dirs use inconsistent casing — `/Create-event`, `/My-events`, `/Upcoming-Events`, `/JoinedEvents`, `/Login`, `/Register`. `Link href` and `router.push` must match exactly (prod URLs are case-sensitive).
+
+## Auth (better-auth + MongoDB)
+
+- Server: `src/lib/auth.js` creates `new MongoClient(process.env.MONGODB_URL)`, db name `Event`. Throws if `MONGODB_URL` is missing.
+- Handler: `src/app/api/auth/[...all]/route.js` (`toNextJsHandler(auth)`, imports `../../../../lib/auth.js` relatively, not via `@/`).
+- Client: `src/lib/auth-client.js` exports `authClient` (`createAuthClient({ baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL })`) plus `signIn`, `signUp`, `signOut`, `useSession`. There is only ONE `createAuthClient` call — do not add a second bare one missing `baseURL`.
+
+## Backend API & environment
+
+- Backend runs separately on `http://localhost:5000`. `.env` defines `NEXT_PUBLIC_API_URL=http://localhost:5000`.
+- Most pages call `fetch(`${process.env.NEXT_PUBLIC_API_URL}/...`)`, but `src/app/JoinedEvents/page.jsx` and `src/app/Upcoming-Events/[id]/page.jsx` still hardcode `http://localhost:5000`. Prefer the env var when touching these files.
+- `.env` contains real secrets (`BETTER_AUTH_SECRET`, `MONGODB_URL`) and is NOT committed (`.gitignore` excludes `.env*`). Client-side vars need the `NEXT_PUBLIC_` prefix. Do not commit new secrets without flagging it.
+
+## Gotchas
+
+- Font naming is misleading: `layout.js` loads **Lora** (a serif) and applies it site-wide via `lora.className`, but registers it as CSS var `--font-geist-sans` and never applies `lora.variable` (so that var never reaches the page). `globals.css` sets `--font-mono: var(--font-geist-mono)`, which is defined nowhere — `font-mono` falls back. Don't assume Geist is loaded.
+- `src/components/RecentEvents.jsx` is dead/broken: commented out of `src/app/page.js`, and it references `mockEvents` from the deleted `src/lib/mockEvents.js` (its import is also commented). Uncommenting it throws — restore a data source first.
+- A stray git-tracked directory literally named `@/` sits at the repo root holding copies of `ui/button.jsx` and `ui/dialog.jsx`. Ignore it; the `@/*` alias resolves to `src/*`.
+- The root `layout.js` imports `Footer` from `../components/Foder.jsx` — the file really is named `Foder.jsx` (typo). Do not "fix" the import unless you rename the file consistently.
+- No CI workflows, no pre-commit hooks, no `opencode.json` instructions file exist in this repo.

@@ -5,34 +5,46 @@
 import Link from "next/link";
 import { DialogDemo } from "../../components/EditEventDialog.jsx";
 import { useEffect, useState } from "react";
+import { authClient } from "../../lib/auth-client";
 
 export default function MyEventsPage() {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    const { data: session } = authClient.useSession();
+    const user = session?.user;
+
     useEffect(() => {
         const fetchEvents = async () => {
+            if (!user?.email) return;
+
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my-event`);
+                setLoading(true);
+
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/my-events/${encodeURIComponent(user.email)}`
+                );
 
                 if (!res.ok) {
-                    throw new Error("Failed to fetch events");
+                    throw new Error(`API Error: ${res.status}`);
                 }
 
                 const data = await res.json();
+
+                console.log("My Events Data:", data);
+
                 setEvents(Array.isArray(data) ? data : []);
-            } catch (err) {
-                console.error("Fetch error:", err);
-                setError("Failed to load events. Please check your server.");
+            } catch (error) {
+                console.error("Fetch Events Error:", error);
+                toast.error("Failed to fetch events");
             } finally {
                 setLoading(false);
             }
         };
 
         fetchEvents();
-    }, []);
-
+    }, [user?.email]);
     const viewEvent = (event) => {
         alert(
             `Title: ${event.title} \nLocation: ${event.location} \nDescription: ${event.description} `

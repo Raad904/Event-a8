@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "../../../lib/auth-client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,9 +13,23 @@ export default function EventDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isJoined, setIsJoined] = useState(false);
+  const [checkingJoinStatus, setCheckingJoinStatus] = useState(true);
+
+  // const { data: session } = authClient.useSession();
+  // const user = session?.user;
+
+  const {
+    data: session,
+    isPending,
+    error: authError,
+  } = authClient.useSession();
+
+  const user = session?.user;
+
+
 
   useEffect(() => {
-    if (!id) return;
+    if (isPending || !id) return;
 
     let cancelled = false;
 
@@ -23,6 +38,7 @@ export default function EventDetailsPage() {
         setLoading(true);
         setError("");
 
+        // Fetch event details
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/Upcoming-Events/${id}`
         );
@@ -33,47 +49,46 @@ export default function EventDetailsPage() {
 
         const data = await res.json();
 
-        console.log(data);
+        if (cancelled) return;
 
-        if (!cancelled) {
-          setEvent(data);
+        setEvent(data);
 
-          let joined = [];
+        // Check joined status from MongoDB
+        if (user?.email) {
+          setCheckingJoinStatus(true);
 
-          try {
-            joined = JSON.parse(
-              localStorage.getItem("joinedEvents") || "[]"
-            );
+          const joinRes = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/join/${encodeURIComponent(user.email)}`
+          );
 
-            if (!Array.isArray(joined)) {
-              joined = [];
-            }
-          } catch (e) {
-            console.error(
-              "Failed to parse joinedEvents from localStorage",
-              e
-            );
-
-            joined = [];
+          if (!joinRes.ok) {
+            throw new Error("Failed to check joined status");
           }
 
-          setIsJoined(
-            joined.some((e) => e && e._id === data._id)
-          );
+          const joinedData = await joinRes.json();
+
+          if (cancelled) return;
+
+          const alreadyJoined = Array.isArray(joinedData) &&
+            joinedData.some(
+              (item) => String(item.eventId) === String(data._id)
+            );
+
+          setIsJoined(alreadyJoined);
+        } else {
+          setIsJoined(false);
         }
+
       } catch (err) {
         if (!cancelled) {
           console.error("Event fetch error:", err);
-
           setError("Unable to load event details.");
-
-          toast.error(
-            "Unable to load event details. Please try again."
-          );
+          toast.error("Unable to load event details.");
         }
       } finally {
         if (!cancelled) {
           setLoading(false);
+          setCheckingJoinStatus(false);
         }
       }
     };
@@ -83,63 +98,68 @@ export default function EventDetailsPage() {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, user?.email, isPending]);
 
   // Join Event Handler
-  const handleJoinEvent = () => {
+  const handleJoinEvent = async (e) => {
+    e.preventDefault();
+
+    if (!user?.id) {
+      toast.error("Please login first to join this event.");
+      return;
+    }
+
     if (!event?._id) {
       toast.error("Event information is unavailable.");
       return;
     }
 
+    if (isJoined) {
+      toast.info("You have already joined this event.");
+      return;
+    }
+
     try {
-      let joined = [];
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/joining`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          ...event,
+        }),
+      });
 
-      try {
-        joined = JSON.parse(
-          localStorage.getItem("joinedEvents") || "[]"
-        );
+      const data = await res.json().catch(() => ({}));
 
-        if (!Array.isArray(joined)) {
-          joined = [];
-        }
-      } catch (e) {
-        console.error(
-          "Failed to parse joinedEvents from localStorage",
-          e
-        );
-
-        joined = [];
-      }
-
-      const alreadyJoined = joined.some(
-        (e) => e && e._id === event._id
-      );
-
-      if (isJoined || alreadyJoined) {
+      // Already joined
+      if (res.status === 409) {
+        setIsJoined(true);
         toast.info("You have already joined this event.");
         return;
       }
 
-      joined.push(event);
-
-      localStorage.setItem(
-        "joinedEvents",
-        JSON.stringify(joined)
-      );
+      if (!res.ok) {
+        throw new Error(
+          data.message || `Failed to join event (status ${res.status})`
+        );
+      }
 
       setIsJoined(true);
 
       toast.success("Successfully joined the event! 🎉");
-    } catch (error) {
-      console.error("Join event error:", error);
 
-      toast.error(
-        "Unable to join this event. Please try again."
-      );
+      console.log("Joining API Response:", data);
+
+    } catch (error) {
+      console.error("Join Event Error:", error);
+
+      toast.error(error.message || "Unable to join this event.");
     }
   };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-purple-900 flex items-center justify-center text-white text-xl">
@@ -256,16 +276,26 @@ export default function EventDetailsPage() {
               </Link>
 
               {/* Join Event Button */}
-              <button
-                onClick={handleJoinEvent}
-                className={`mt-4 inline-flex items-center gap-2 rounded-full text-white font-extrabold text-sm px-6 py-3 shadow-[0_8px_25px_rgba(233,30,140,0.4)] transition-all active:scale-[0.98] ${
-                  isJoined
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-600 shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:shadow-[0_12px_35px_rgba(16,185,129,0.5)]"
-                    : "bg-gradient-to-r from-[#e91e8c] to-[#9c27b0] hover:shadow-[0_12px_35px_rgba(233,30,140,0.5)]"
-                }`}
-              >
-                {isJoined ? "Joined Event" : "Join Event"}
-              </button>
+              <form onSubmit={handleJoinEvent}>
+                <button
+                  type="submit"
+                  disabled={isJoined || checkingJoinStatus || !user?.id}
+                  className={`mt-4 inline-flex items-center gap-2 rounded-full text-white font-extrabold text-sm px-6 py-3 transition-all
+    ${isJoined
+                      ? "bg-gradient-to-r from-emerald-500 to-teal-600 cursor-not-allowed opacity-80"
+                      : checkingJoinStatus || !user?.id
+                        ? "bg-gray-500 cursor-not-allowed opacity-60"
+                        : "bg-gradient-to-r from-[#e91e8c] to-[#9c27b0] hover:shadow-[0_12px_35px_rgba(233,30,140,0.5)]"
+                    }
+  `}
+                >
+                  {isJoined
+                    ? "Joined Event"
+                    : checkingJoinStatus
+                      ? "Checking..."
+                      : "Join Event"}
+                </button>
+              </form>
 
             </div>
 

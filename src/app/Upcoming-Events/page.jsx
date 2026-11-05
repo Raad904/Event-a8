@@ -31,7 +31,7 @@ export default function UpcomingEventsPage() {
           throw new Error("Failed to fetch events");
         }
 
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
 
         if (!Array.isArray(data)) {
           throw new Error("Invalid events data");
@@ -249,7 +249,7 @@ export default function UpcomingEventsPage() {
                     </p>
 
                     <a
-                       href={`/Upcoming-Events/${event._id}`}
+                       href={`/My-events/${event._id}`}
                       className="inline-flex items-center text-sm font-bold text-amber-200 transition-colors hover:text-amber-100"
                     >
                       Learn more →
