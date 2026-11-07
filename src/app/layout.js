@@ -36,8 +36,10 @@ export default function RootLayout({ children }) {
 
         <ThemeProvider>
           <Navbar />
-          <ProfileDropdown />
-          <div className="fixed top-8 right-22 z-[60]">
+          <div className="hidden sm:flex">
+            <ProfileDropdown />
+          </div>
+          <div className="hidden sm:flex fixed top-8 right-22 z-[60]">
             <ThemeToggle />
           </div>
 

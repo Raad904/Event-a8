@@ -6,7 +6,7 @@ import { authClient } from "../lib/auth-client";
 import { LogOut, CalendarDays, PlusCircle, ChevronDown, Heart } from "lucide-react";
 // import { ThemeToggle } from "./ThemeToggle";
 
-export default function ProfileDropdown() {
+export default function ProfileDropdown({ inline = false, className = "" } = {}) {
   const { data: session, isPending } = authClient.useSession();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -46,7 +46,7 @@ export default function ProfileDropdown() {
   }
 
   return (
-    <div ref={ref} className="fixed top-6 right-6 z-[60]">
+    <div ref={ref} className={`z-[60] ${inline ? "relative inline-block" : "fixed top-6 right-6"} ${className}`}>
       <button
         onClick={() => setOpen(!open)}
         aria-label="Profile menu"

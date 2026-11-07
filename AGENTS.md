@@ -39,8 +39,21 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Theme system (next-themes)
 
 - `src/components/ThemeProvider.jsx` (`defaultTheme: "dark"`, `storageKey: "theme"`, `attribute: "class"`, `enableSystem: false`). `layout.js` wraps `Navbar`, `ProfileDropdown`, `<main>`, `Footer` in it; `html` gets `scroll-smooth`, `body` gets `transition-colors duration-300`.
-- `ThemeToggle` renders in a fixed div in `layout.js` (`top-8 right-22`), **not** inside `ProfileDropdown` (its import/usage there are commented out).
+- `ThemeToggle` renders in a fixed div in `layout.js` (`top-8 right-22`), **not** inside `ProfileDropdown` (its import/usage there are commented out). On mobile, `Navbar` also renders a `ThemeToggle` (replacing the Create Event button) and the layout-level `ThemeToggle` is hidden (`hidden sm:flex`).
 - Default theme is dark — existing purple/pink/orange gradient design is preserved as `dark:` variants; light mode uses white/light gray backgrounds with `text-gray-900`. Theme persists in `localStorage`; no flicker mitigation beyond `defaultTheme="dark"` SSR.
+
+## Responsive navbar (`src/components/Navbar.jsx`)
+
+- Desktop (sm and up): unchanged — Home, Upcoming Events, My Events, Joined Events links; Create Event + Login/Logout buttons on the right.
+- Mobile (below sm): Upcoming Events, My Events, Joined Events links are hidden (`hidden sm:flex`). Create Event and Login/Logout buttons are hidden (`hidden sm:inline-flex`). In their place: a small inline `<ProfileDropdown />` (replaces Login/Logout) and `<ThemeToggle />` (replaces Create Event).
+- `ProfileDropdown` accepts `inline` (flows inside navbar instead of `fixed top-6 right-6`) and `className`; `ThemeToggle` accepts `className`.
+- `layout.js` hides its standalone `<ProfileDropdown />` and `<ThemeToggle />` on mobile (`hidden sm:flex`) to avoid duplication with the mobile Navbar.
+- `useRouter` is imported in `Navbar` but currently unused — keep or remove as needed.
+
+## Known hydration quirks
+
+- `next-themes` (`src/components/ThemeProvider.jsx`) injects a `<script>` tag at runtime. Under React 19 / Next.js 16 this triggers a "Encountered a script tag while rendering React component" console warning and can contribute to hydration mismatch. It's a library issue, not app code — do not try to remove `ThemeProvider`; the warning is benign.
+- `layout.js` already has `suppressHydrationWarning` on `<html>`; invalid tag nesting (e.g. `<li>` inside `<li>`) will still cause hard hydration errors — keep all `<ul>` children as `<li>` only.
 
 ## Gotchas
 
