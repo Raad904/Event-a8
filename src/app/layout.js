@@ -22,6 +22,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${lora.className} h-full antialiased scroll-smooth`}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col transition-colors duration-300">
