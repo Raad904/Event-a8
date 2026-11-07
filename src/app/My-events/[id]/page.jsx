@@ -12,7 +12,7 @@ export default function EventDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isJoined, setIsJoined] = useState(false);
-
+  const [isJoining, setIsJoining] = useState(false);
   const {
     data: session,
     isPending,
@@ -69,36 +69,72 @@ export default function EventDetailsPage() {
   }, [id]);
 
   // Join Event Handler
-  const handleJoinEvent = () => {
+  const handleJoinEvent = async (e) => {
+    e.preventDefault();
+
+    if (isJoining || isJoined) return;
+
+    if (!user?.id) {
+      toast.error("Please login first to join this event.");
+      return;
+    }
+
+    if (!event?._id) {
+      toast.error("Event information is unavailable.");
+      return;
+    }
+
     try {
+      setIsJoining(true);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/joining`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...event,
+            _id: event._id,
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to join event");
+      }
+
+      setIsJoined(true);
+
+      // Save joined event in localStorage
       const joined = JSON.parse(
         localStorage.getItem("joinedEvents") || "[]"
       );
 
-      const alreadyJoined = joined.some(
-        (e) => e._id === event._id
+      const alreadyExists = joined.some(
+        (item) => item._id === event._id
       );
 
-      if (alreadyJoined || isJoined) {
-        toast.info("You have already joined this event.");
-        return;
+      if (!alreadyExists) {
+        localStorage.setItem(
+          "joinedEvents",
+          JSON.stringify([...joined, event])
+        );
       }
-
-      joined.push(event);
-
-      localStorage.setItem(
-        "joinedEvents",
-        JSON.stringify(joined)
-      );
-
-      setIsJoined(true);
 
       toast.success("Successfully joined the event! 🎉");
 
     } catch (error) {
-      console.error("Join event error:", error);
-
-      toast.error("Unable to join this event. Please try again.");
+      console.error("Join Event Error:", error);
+      toast.error(error.message || "Unable to join this event.");
+    } finally {
+      setIsJoining(false);
     }
   };
 
@@ -219,15 +255,26 @@ export default function EventDetailsPage() {
               </a>
 
               {/* Join Event Button */}
-              <button
-                onClick={handleJoinEvent}
-                className={`mt-4 inline-flex items-center gap-2 rounded-full text-white font-extrabold text-sm px-6 py-3 shadow-[0_8px_25px_rgba(233,30,140,0.4)] transition-all active:scale-[0.98] ${isJoined
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-600 shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:shadow-[0_12px_35px_rgba(16,185,129,0.5)]"
-                  : "bg-gradient-to-r from-[#e91e8c] to-[#9c27b0] hover:shadow-[0_12px_35px_rgba(233,30,140,0.5)]"
-                }`}
-              >
-                {isJoined ? "Joined Event" : "Join Event"}
-              </button>
+              <form onSubmit={handleJoinEvent}>
+                <button
+                  type="submit"
+                  disabled={isJoined || isJoining || isPending}
+                  className={`mt-4 rounded-full text-white font-extrabold text-sm px-6 py-3 transition-all duration-300 ${isJoined
+                    ? "bg-emerald-500 cursor-not-allowed opacity-80"
+                    : isJoining || isPending
+                      ? "bg-gray-500 cursor-not-allowed opacity-70"
+                      : "bg-gradient-to-r from-[#e91e8c] to-[#9c27b0] hover:scale-105"
+                    }`}
+                >
+                  {isJoined
+                    ? "✓ Joined Event"
+                    : isJoining
+                      ? "Joining..."
+                      : isPending
+                        ? "Loading..."
+                        : "Join Event"}
+                </button>
+              </form>
 
             </div>
 

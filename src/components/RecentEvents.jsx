@@ -59,7 +59,7 @@ export default function RecentEvents() {
 
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-            Recent Upcoming Events
+            Recent Events
           </h2>
 
           <p className="mt-4 text-lg text-gray-600 dark:text-white/80">

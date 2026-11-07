@@ -21,7 +21,7 @@ export default function BannerSection() {
           We connect passionate volunteers with meaningful social development and community service opportunities. Together, we create lasting impact.
         </p>
         <div className="mt-10 flex justify-center gap-4">
-          <a href="#events" className="inline-flex items-center justify-center rounded-full bg-white dark:bg-white/10 text-purple-900 dark:text-white font-bold px-8 py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.3)] hover:bg-gray-100 dark:hover:bg-white/20 transition-colors backdrop-blur-sm dark:backdrop-blur-md">
+          <a href={'/Upcoming-Events'} className="inline-flex items-center justify-center rounded-full bg-white dark:bg-white/10 text-purple-900 dark:text-white font-bold px-8 py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.3)] hover:bg-gray-100 dark:hover:bg-white/20 transition-colors backdrop-blur-sm dark:backdrop-blur-md">
             Upcoming Events
           </a>
           <a href={user ? "/Create-event" : "/Login"} className="inline-flex items-center justify-center rounded-full bg-white/10 dark:bg-white/10 text-gray-900 dark:text-white font-semibold px-8 py-3.5 border border-gray-300 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-white/20 transition-colors backdrop-blur-sm dark:backdrop-blur-md">

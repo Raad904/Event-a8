@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { authClient } from "../../lib/auth-client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function JoinedEventsPage() {
   const { data: session, isPending } = authClient.useSession();
@@ -104,7 +105,10 @@ export default function JoinedEventsPage() {
 
   // Remove all joined events from MongoDB
   const handleClearAll = async () => {
-    if (!user?.email) return;
+    if (!user?.email) {
+      toast.error("Please login first.");
+      return;
+    }
 
     const confirmed = window.confirm(
       "Are you sure you want to remove all joined events?"
@@ -128,17 +132,26 @@ export default function JoinedEventsPage() {
 
       setEvents([]);
 
+      localStorage.setItem("joinedEvents", JSON.stringify([]));
+
+      toast.success("All joined events removed successfully! 🎉");
+
       console.log("Clear All Response:", data);
+
     } catch (error) {
       console.error("Clear All Error:", error);
-      setError(error.message || "Unable to clear joined events.");
+
+      toast.error(error.message || "Unable to clear joined events.");
     }
   };
 
 
   // Remove a single joined event from MongoDB
   const handleRemoveEvent = async (eventId) => {
-    if (!user?.email || !eventId) return;
+    if (!user?.email || !eventId) {
+      toast.error("Unable to identify the event.");
+      return;
+    }
 
     const confirmed = window.confirm(
       "Are you sure you want to remove this joined event?"
@@ -160,17 +173,35 @@ export default function JoinedEventsPage() {
         throw new Error(data.message || "Failed to remove event.");
       }
 
+      // Update Joined Events UI
       setEvents((prev) =>
         prev.filter(
           (event) => String(event.eventId) !== String(eventId)
         )
       );
 
+      // Update localStorage
+      const joined = JSON.parse(
+        localStorage.getItem("joinedEvents") || "[]"
+      );
+
+      const updatedJoined = joined.filter(
+        (event) => String(event._id) !== String(eventId)
+      );
+
+      localStorage.setItem(
+        "joinedEvents",
+        JSON.stringify(updatedJoined)
+      );
+
+      toast.success("Event removed successfully! ✅");
+
       console.log("Remove Event Response:", data);
 
     } catch (error) {
       console.error("Remove Event Error:", error);
-      setError(error.message || "Unable to remove joined event.");
+
+      toast.error(error.message || "Unable to remove joined event.");
     }
   };
 
