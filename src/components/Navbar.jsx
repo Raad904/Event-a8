@@ -66,8 +66,8 @@ export default function Navbar() {
             </Link>
           )}
 
-          {/* Desktop: Logout (logged in) / Login (logged out) — hidden on mobile */}
-          {user ? (
+          {/* Desktop: Logout (logged in) — hidden on mobile */}
+          {user && (
             <button
               onClick={async () => {
                 await authClient.signOut();
@@ -77,13 +77,6 @@ export default function Navbar() {
             >
               Logout
             </button>
-          ) : (
-            <Link
-              href="/Login"
-              className="hidden sm:inline-flex shrink-0 ml-1 items-center justify-center text-xs sm:text-sm font-semibold text-purple-900 dark:text-purple-900 bg-white dark:bg-white hover:bg-gray-100 dark:hover:bg-white/90 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] dark:shadow-[0_4px_14px_0_rgba(255,255,255,0.25)] transition-colors"
-            >
-              Login
-            </Link>
           )}
 
           {/* Mobile: ProfileDropdown replaces Login/Logout (center of navbar) */}

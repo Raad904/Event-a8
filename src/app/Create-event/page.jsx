@@ -6,18 +6,30 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function CreateEventPage() {
-  const { data: session, isPending } = authClient.useSession();
+  const {
+    data: session,
+    isPending,
+    error,
+  } = authClient.useSession();
   const router = useRouter();
   const user = session?.user;
 
   useEffect(() => {
-    if (isPending) return;
+    if (isPending || session === undefined) return;
 
-    if (!user) {
-      toast.warning("Please login to create an event.");
-      router.push("/Login");
+    // Session API-তে সমস্যা হলে ভুল করে Login-এ পাঠাবে না
+    if (error) {
+      console.error("Session verification failed:", error);
+      toast.error("Unable to verify your session. Please try again.");
+      return;
     }
-  }, [user, isPending, router]);
+
+    // নিশ্চিতভাবে লগইন না থাকলেই redirect
+    if (session === null) {
+      toast.warning("Please login to create an event.");
+      router.replace("/Login");
+    }
+  }, [session, isPending, error, router]);
 
   const initialForm = {
     title: "",
